@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "dazzling-kite-372112",
+    "private_key_id": "eb60057dbd7738d874242a34af2264dd173fd579",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC7J2i+AcnqCM2O\nxhcV90IFrvbAgQPimcx6MVOvBGDTt33F9eLPGtiMcPOgnAHPRKRKJ5JragfiU5Fq\nx2owKyVekaAY676ALm1Wc7e+WLjVTMfwpXY4OihGV0xfMpX7f52Pf7vQpKs2CFCY\nZUg5zVbUrXb3qk55XxenxPkGMJUF7P+wgwyI4c7qrTW52bg1VFz0/96b1j9jYwfF\npZDf+eVE3VlOxH9hNHbBnvBLd8IWwA/5PiRrXyTilWrVCt1Otsv1jEgodF8gCYZJ\nWOwAmu4DdsJpFQHANWDcFfGryqq8htS3cnKRC8ppCzBr+wH73yJ66W9D2QclkI2v\nFntJmnlBAgMBAAECggEACfxkKCs+mPhc8MlyBuUusSXw8Dw8tv+00NpGmE04ALlG\n1+QISjuo9/QOPnDEifN5fqQWOcP/urGceIw+XBFD866lJ7SVxroeHGGdRBCbgB9n\ngFgbyDaWL+FNkmYdFD0ZbO7drcLI3d+ws95HmHSeivIx1Fd9IMMUUd/T17g042Ah\nXyNlcSE/MZs97BqIVTSvS+gqGaEOIUOv38hg0Oc6U46tKUALexgNwh+cyZh/Jpo1\n0RvhD6XzbA4MKeRqe8CS4LrRpadrCXm4h8mlFEewDgpTiSZWI1eLvD0eacFsDSUW\nas8UKfE8bvaFUQ0x3dii0oCrI2R+0H+ChLkJB6lq7wKBgQDikIlY0G6icIzpDf70\nsQpVeDUWE0d1e2XMM5P/rWbgJ0MdD5T+KYwYAiz+ehzmyVnRgLX8eMVE6nikwt6F\nIKIQ3m7+Z9vdZLHi8CwY9mqtB2U16ZFHCZLxBH/lkIWqUgxofAKQnRkdiwvt2pR7\niwiysBvcz97X3Hp93Js03ajsxwKBgQDTeBZbhqqFQPqefmg+tdBX5qSkEOX5VaIa\nBMTP+mhSgEzi2gg5LoQnlYF4sLguIZTrtYAtDt8A5pGfs54rVt3QgZIHbUdtCJuc\nvyeco4SBVLiknCxPDv8jalgsq1tq8UU4OYWN9MXU4sJRQNhiLMPj52RPvi1Xu+cx\nz4+7EOARtwKBgFvgw2IZ/JOxUuN8AoWWehtZCSYvoU36QbkCvaT03ABQy72wQPql\nPKPL1hVIzgmlY+A68xI0o8Mj1tLyF60jI7X1jktrMNVibWUbgraIz4/lrNylIH4P\nWuCUs40UA7CjX1bL23pryvCZH7hQaOCE7H0SP+pW/gbJ6X67BNH2hfenAoGAZNaH\nur89gutYVsmqRfUG01OdQMr6DupBsSyC+TXMF0Ms5qPXdgTzabjGE1oZiY3j6H4V\nD+deeZx45nGNQ9dZUHrounfmrlyDb7xLVEs4/T78CSqbilt5WFb2kt5naliAjG4J\nfIay62/x/zLvu+jixENrtwbVsldcyIjUXfyPDIMCgYB36tpm9yxZX01eVFcnIjw6\nsWUVB0zA0YaJm9Qafx0D/1aAhUvRyWSbUHhX85bWNF+yqGPwetQrnyjINNSlp0oA\n5hkaOBKj3To0MrxCRbfbghFXvKpqZZ4i5tjjsa/O1V3UCA3rK7eCvs+OIDCAQAju\nstO3YlWVzJAUF/syfZv97Q==\n-----END PRIVATE KEY-----\n",
+    "client_email": "beautifulsoup-newsletter@dazzling-kite-372112.iam.gserviceaccount.com",
+    "client_id": "110344374053829974034",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/beautifulsoup-newsletter%40dazzling-kite-372112.iam.gserviceaccount.com"
+}
