@@ -4,6 +4,13 @@ import { css } from '@emotion/react';
 import theme from '../src/styles/theme';
 import { headerState, headerColorState } from '../state/index';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Image from 'next/image';
+import Link from 'next/link';
+import HeaderImage from '../public/images/header.png';
+import smallHeaderImage from '../public/images/smallHeader.png';
+import searchIconImage from '../public/images/searchIcon.png';
+import menuIconImage from '../public/images/menuIcon.png';
+import logoImage from '../public/images/logo.png';
 
 const Container = (menuIsOpen: boolean, searchIsOpen: boolean, headerColor: string) => css`
   width: calc(100% - 44px);
@@ -298,7 +305,7 @@ const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IH
     height: 0,
   });
 
-  const [headerImageSrc, setHeaderImageSrc] = React.useState('../../../static/images/header.png');
+  const [headerImageSrc, setHeaderImageSrc] = React.useState(HeaderImage);
   const [isScrollOver, setIsScrollOver] = React.useState(false);
 
   const fffBackground: TWhiteBackground = [
@@ -340,10 +347,10 @@ const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IH
   React.useEffect(() => {
     if (clientWindowHeight > 100) {
       setIsScrollOver(true);
-      setHeaderImageSrc('../../../static/images/smallHeader.png');
+      setHeaderImageSrc(smallHeaderImage);
     } else {
       setIsScrollOver(false);
-      setHeaderImageSrc('../../../static/images/header.png');
+      setHeaderImageSrc(HeaderImage);
     }
   }, [clientWindowHeight]);
 
@@ -355,12 +362,18 @@ const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IH
     <div css={Container(menuIsOpen, searchIsOpen, headerColor)}>
       <div>
         <ul>
-          <li onClick={() => router.push({ pathname: '/curatorial_practice' })}>
-            1_curatorial_practice
-          </li>
-          <li onClick={() => router.push({ pathname: '/news' })}>2_news</li>
-          <li onClick={() => router.push({ pathname: '/about' })}>3_about</li>
-          <li onClick={() => router.push({ pathname: '/index' })}>4_index</li>
+          <Link href="/curatorial_practice">
+            <li>1_curatorial_practice</li>
+          </Link>
+          <Link href="/news">
+            <li>2_news</li>
+          </Link>
+          <Link href="/about">
+            <li>3_about</li>
+          </Link>
+          <Link href="/index">
+            <li>4_index</li>
+          </Link>
         </ul>
       </div>
       <div>
@@ -369,7 +382,7 @@ const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IH
       </div>
       <div css={HeaderWrapper(menuIsOpen, searchIsOpen, isScrollOver, headerColor)} ref={headerRef}>
         <div>
-          <img src={headerImageSrc} alt="Header_image" />
+          <Image src={headerImageSrc} alt="Header_image" />
         </div>
         <div>
           <div>
@@ -379,26 +392,24 @@ const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IH
             <div>
               <div
                 onClick={() => {
-                  console.log('searchIsOpen clicked!');
                   setSearchIsOpen(!searchIsOpen);
                   setMenuIsOpen(false);
                 }}
               >
-                <img src="../../static/images/searchIcon.png" alt="search_icon" />
+                <Image src={searchIconImage} alt="search_icon" placeholder="blur" />
               </div>
               <div
                 onClick={() => {
-                  console.log('menuIsOpen clicked!');
                   setSearchIsOpen(false);
                   setMenuIsOpen(!menuIsOpen);
                 }}
               >
-                <img src="../../static/images/menuIcon.png" alt="menu_icon" />
+                <Image src={menuIconImage} alt="menu_icon" />
               </div>
             </div>
           </div>
           <div onClick={() => router.push({ pathname: '/' })}>
-            <img src="../../static/images/logo.png" alt="logo" />
+            <Image src={logoImage} layout="responsive" alt="logo" />
           </div>
         </div>
       </div>

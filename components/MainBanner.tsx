@@ -1,8 +1,44 @@
 import React from 'react';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import theme from '../src/styles/theme';
 
 import { useRouter } from 'next/router';
+
+const MarqueeAnimation = keyframes`
+0% {
+    transform: translate3d(var(--move-initial), 0, 0);
+}
+
+100% {
+    transform: translate3d(var(--move-final), 0, 0);
+}
+`;
+
+const Marquee = css`
+  width: 1600vw;
+  position: relative;
+  overflow: hidden;
+  --offset: 20vw;
+  --move-initial: calc(0);
+  --move-final: calc(-50% + var(--offset));
+  display: flex;
+  align-items: center;
+
+  & > div {
+    width: fit-content;
+    display: inline-block;
+    position: relative;
+    overflow: hidden !important;
+    transform: translate3d(var(--move-initial), 0, 0);
+    animation-play-state: paused;
+    animation-play-state: running;
+  }
+
+  @media only screen and (max-width: ${theme.size.mobile}) {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+`;
 
 const Container = css`
   width: 100%;
@@ -287,8 +323,12 @@ const MainBanner = () => {
     <div css={Container}>
       <div>
         <h2>
-          <div className="marquee">
-            <div className="marquee__inner" aria-hidden="true">
+          <div css={Marquee}>
+            <div
+              css={css`
+                animation: ${MarqueeAnimation} 100s linear infinite;
+              `}
+            >
               <span>curators</span>
               _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
               _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

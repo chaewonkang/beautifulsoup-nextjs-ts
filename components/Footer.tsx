@@ -2,6 +2,10 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import theme from '../src/styles/theme';
+import Image from 'next/image';
+
+import footerLogoImage from '../public/images/footer.png';
+import NewsLetterSubmit from './NewsLetterSubmit';
 
 const Container = css`
   width: 100%;
@@ -126,9 +130,10 @@ const Footer = () => {
   const router = useRouter();
   return (
     <div css={Container}>
+      <NewsLetterSubmit />
       <div>
         <div>
-          <img src="../../static/images/footer.png" />
+          <Image src={footerLogoImage} layout="intrinsic" alt="footer_logo" />
         </div>
         <div>
           <h3>

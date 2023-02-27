@@ -81,7 +81,7 @@ type FormProps = {
   onSubmit: (form: { email: string }) => void;
 };
 
-const NewsLetterSubmit = ({ onSubmit }: FormProps) => {
+const NewsLetterSubmit = () => {
   const [submitMessage, setSubmitMessage] = React.useState('submit');
   const [email, setEmail] = React.useState('');
 
@@ -93,23 +93,21 @@ const NewsLetterSubmit = ({ onSubmit }: FormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({ email });
+    // onSubmit({ email });
     setEmail('');
   };
 
   return (
     <div css={Container}>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <span>newsletter</span>
-        </div>
-        <div>
-          <input onChange={onChange} value={email} type="text" placeholder="Enter email" />
-        </div>
-        <div>
-          <button type="submit">{submitMessage}</button>
-        </div>
-      </form>
+      <div>
+        <span>newsletter</span>
+      </div>
+      <div>
+        <input onChange={onChange} value={email} type="text" placeholder="Enter email" />
+      </div>
+      <div>
+        <span>{submitMessage}</span>
+      </div>
     </div>
   );
 };

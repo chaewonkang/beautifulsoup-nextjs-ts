@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import '@/styles/globals.css';
 import '@/styles/fonts.css';
+import '@/styles/base.css';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import * as gtag from '../lib/ga/gtag';
