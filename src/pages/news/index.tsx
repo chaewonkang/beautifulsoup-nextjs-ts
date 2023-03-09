@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import theme from '../../styles/theme';
+import Image from 'next/image';
 
 /* comps */
 import { PageLayout } from '../../../components';
@@ -8,6 +9,9 @@ import { PageLayout } from '../../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
+
+/* images */
+import SampleImage1 from '/public/images/about_1.png';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -133,7 +137,7 @@ const NewsModuleContainer = css`
     img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
 
@@ -222,7 +226,7 @@ const NewsModule = () => {
   return (
     <div css={NewsModuleContainer}>
       <div>
-        <img src="../../static/images/news/news_1.png" alt="news_1" />
+        <Image src={SampleImage1} alt="sample_image" />
       </div>
       <div>2022. 11. 28. </div>
       <div>A New Vision of Vision</div>
@@ -267,9 +271,6 @@ const News = (): JSX.Element => {
             </div>
           </div>
           <div>
-            <NewsModule />
-            <NewsModule />
-            <NewsModule />
             <NewsModule />
           </div>
         </div>
