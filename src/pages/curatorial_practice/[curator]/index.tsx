@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 /* comps */
-import { PageLayout } from '../../../../components';
+import { PageLayout, ArtistBanner, Note } from '../../../../components';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -14,7 +14,9 @@ import { headerState, headerColorState } from '../../../../state/index';
 
 /* images */
 import SampleImage1 from '/public/images/about_1.png';
-import ArrowRight from '/public/images/arrowRight.png';
+
+/* interfaces */
+import type { IArtistBannerProps, INoteProps } from '../../../../interfaces/index';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -402,62 +404,53 @@ const BioContainer = css`
   }
 `;
 
-const ArtistBanner = (colorCode: string) => css`
-  height: fit-content;
-  top: 276px;
-  height: 80px;
-  width: 100%;
-  border-top: 2.5px solid #000;
-  display: flex;
-  align-items: center;
-  padding-top: 0;
-  justify-content: space-between;
-  cursor: pointer;
+type TArtistBannerSampleData = IArtistBannerProps[];
+type TNoteBannerSampleData = INoteProps[];
 
-  :hover {
-    background-color: ${colorCode};
-    cursor: pointer;
-  }
+const ArtistBannerData: TArtistBannerSampleData = [
+  {
+    name: 'Alaa Abu Asad',
+    pathname: 'alaa_abu_asad',
+    isCurator: false,
+    colorCode: '#E6FFC5',
+  },
+  {
+    name: 'Mooni Perry',
+    pathname: 'mooni_perry',
+    isCurator: false,
+    colorCode: '#EAE8FF',
+  },
+  {
+    name: 'Chulayarnnon Siriphol',
+    pathname: 'chulayarnnon_siriphol',
+    isCurator: false,
+    colorCode: '#FFE8FF',
+  },
+  {
+    name: 'TJ Shin',
+    pathname: 'tj_shin',
+    isCurator: false,
+    colorCode: '#D2FFFF',
+  },
+  {
+    name: 'Hwang Miyojo',
+    pathname: 'hwang_miyojo',
+    isCurator: false,
+    colorCode: '#FFD2E9',
+  },
+];
 
-  & > div:first-of-type {
-    font-family: ${theme.fontFamily.sans}, sans-serif;
-    font-size: ${theme.fontSize.titleSans};
-    line-height: ${theme.lineHeight.titleSans};
-    letter-spacing: ${theme.letterSpacing.sans};
-    width: 100%;
-    overflow: hidden;
-  }
-
-  & > div:last-of-type {
-    width: 40px;
-    margin-left: 20px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    height: auto;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-top: 2.5px solid #000;
-
-    & > div:first-of-type {
-      font-size: ${theme.fontSize.m_titleSans};
-      line-height: ${theme.lineHeight.m_titleSans};
-      width: 100%;
-    }
-
-    & > div:last-of-type {
-      width: 20px;
-    }
-  }
-`;
+const NoteData: TNoteBannerSampleData = [
+  {
+    index: 1,
+    content:
+      'The TV series aired in 1990 recorded the highest ratings ever in Thai broadcasting history.',
+  },
+  {
+    index: 2,
+    content: 'Serialized in Sri Siam magazine in 1965, first volume published in 1969.',
+  },
+];
 
 const id = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
@@ -744,7 +737,6 @@ const id = (): JSX.Element => {
                   </p>
                 </div>
               </div>
-
               <div>
                 <div>
                   <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
@@ -809,7 +801,6 @@ const id = (): JSX.Element => {
                   </p>
                 </div>
               </div>
-
               <div>
                 <div></div>
                 <div>
@@ -841,60 +832,8 @@ const id = (): JSX.Element => {
                 <span>Note</span>
               </div>
               <div>
-                <div>
-                  <span>1</span>
-                  <span>
-                    Jay A. Conger and Rabindra N. Kanungo, 'The Empowerment Process: Integrating
-                    Theory and Practice', <b>The Academy of Management Review</b>
-                    13, no. 3 (July 1988): 471–82. https://doi.org/10.2307/258093. 473.
-                  </span>
-                </div>
-                <div>
-                  <span>2</span>
-                  <span>Ibid, 473.</span>
-                </div>
-                <div>
-                  <span>3</span>
-                  <span>Ibid, 473.</span>
-                </div>
-                <div>
-                  <span>4</span>
-                  <span>
-                    Eunha Chang, “Invasive Species and Sovereignty: Japanese Knotweed in the United
-                    Kingdom through Cooking Sections” (Master's dissertation., Goldsmiths,
-                    University of London, 2021).
-                  </span>
-                </div>
-                <div>
-                  <span>5</span>
-                  <span>
-                    Kobayashi S. "Choose Delicately and Reuse Adequately: The Newly Revealed Process
-                    of Autophagy." <b>Biological & Pharmaceutical Bulletin</b> 38, no. 8 (2015):
-                    1098–103. doi:10.1248/bpb.b15-00096. PMID 26235572.
-                  </span>
-                </div>
-                <div>
-                  <span>6</span>
-                  <span>
-                    Umberto Maturana and Francisco Varella, <b>Der Baum der Erkenntnis</b>,
-                    Translated by Choi Hoyoung, Seoul: Galmuri, 2007, 56.
-                  </span>
-                </div>
-                <div>
-                  <span>7</span>
-                  <span>
-                    Mary Douglas,{' '}
-                    <b>Purity and Danger: An Analysis of Concept of Pollution and Taboo</b>,
-                    Routledge Classics (London ; New York: Routledge, 2005), 37-41.
-                  </span>
-                </div>
-                <div>
-                  <span>8</span>
-                  <span>
-                    Michel Foucault, <b>Techniques de soi</b>, translated by Lee Heewon, Seoul:
-                    Dongmunseon, 2020, 48-49.
-                  </span>
-                </div>
+                {NoteData &&
+                  NoteData.map((el, _i) => <Note key={_i} index={el.index} content={el.content} />)}
               </div>
             </div>
             <div css={BioContainer}>
@@ -923,81 +862,16 @@ const id = (): JSX.Element => {
                 </p>
               </div>
             </div>
-            <div
-              css={ArtistBanner('#e6ffc5')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/alaa_abu_asad',
-                })
-              }
-            >
-              <div>
-                <span>Alaa Abu Asad</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#FFE8FF')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/mooni_perry',
-                })
-              }
-            >
-              <div>
-                <span>Mooni Perry</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#EAE8FF')}
-              onClick={() => {
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/chulayarnnon_siriphol',
-                });
-              }}
-            >
-              <div>
-                <span>Chulayarnnon Siriphol</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#E8FFF5')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/tj_shin',
-                })
-              }
-            >
-              <div>
-                <span>TJ Shin</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#D2FFFF')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/hwang_miyojo',
-                })
-              }
-            >
-              <div>
-                <span>Hwang Miyojo</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
+            {ArtistBannerData &&
+              ArtistBannerData.map((el, _i) => (
+                <ArtistBanner
+                  key={_i}
+                  name={el.name}
+                  pathname={el.pathname}
+                  isCurator={el.isCurator}
+                  colorCode={el.colorCode}
+                />
+              ))}
           </div>
         </div>
       </PageLayout>

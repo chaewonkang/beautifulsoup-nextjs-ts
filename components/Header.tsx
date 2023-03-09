@@ -68,7 +68,7 @@ const Container = (menuIsOpen: boolean, searchIsOpen: boolean, headerColor: stri
     width: 100%;
     justify-content: space-between;
     margin-bottom: 16px;
-    height: 95px;
+    height: 80px;
     align-items: center;
     border-bottom: 4px solid #000;
 
@@ -300,7 +300,12 @@ interface IHeaderProps {
 
 type TWhiteBackground = string[];
 
-const Header = ({ menuIsOpen, setMenuIsOpen, searchIsOpen, setSearchIsOpen }: IHeaderProps) => {
+const Header = ({
+  menuIsOpen,
+  setMenuIsOpen,
+  searchIsOpen,
+  setSearchIsOpen,
+}: IHeaderProps): JSX.Element => {
   const router = useRouter();
   const [clientWindowHeight, setClientWindowHeight] = React.useState<number>(0);
   const headerRef = React.useRef<HTMLDivElement>(null);

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 /* comps */
-import { PageLayout } from '../../../../../components';
+import { PageLayout, ArtistBanner, Note } from '../../../../../components';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -13,8 +13,9 @@ import { headerState, headerColorState } from '../../../../../state/index';
 
 /* images */
 import SampleImage1 from '/public/images/about_1.png';
-import ArrowRight from '/public/images/arrowRight.png';
-import ArrowLeft from '/public/images/arrowLeft.png';
+
+/* interface */
+import type { IArtistBannerProps, INoteProps } from '../../../../../interfaces/index';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -392,62 +393,73 @@ const BioContainer = css`
   }
 `;
 
-const ArtistBanner = (colorCode: string) => css`
-  height: fit-content;
-  top: 276px;
-  height: 80px;
-  width: 100%;
-  border-top: 2.5px solid #000;
-  display: flex;
-  align-items: center;
-  padding-top: 0;
-  justify-content: space-between;
-  cursor: pointer;
+type TArtistBannerSampleData = IArtistBannerProps[];
+type TNoteBannerSampleData = INoteProps[];
 
-  :hover {
-    background-color: ${colorCode};
-    cursor: pointer;
-  }
+const ArtistBannerData: TArtistBannerSampleData = [
+  {
+    name: 'Alaa Abu Asad',
+    pathname: 'alaa_abu_asad',
+    isCurator: false,
+    colorCode: '#E6FFC5',
+  },
+  {
+    name: 'Mooni Perry',
+    pathname: 'mooni_perry',
+    isCurator: false,
+    colorCode: '#EAE8FF',
+  },
+  {
+    name: 'Chulayarnnon Siriphol',
+    pathname: 'chulayarnnon_siriphol',
+    isCurator: false,
+    colorCode: '#FFE8FF',
+  },
+  {
+    name: 'TJ Shin',
+    pathname: 'tj_shin',
+    isCurator: false,
+    colorCode: '#D2FFFF',
+  },
+  {
+    name: 'Hwang Miyojo',
+    pathname: 'hwang_miyojo',
+    isCurator: false,
+    colorCode: '#FFD2E9',
+  },
+];
 
-  & > div:first-of-type {
-    font-family: ${theme.fontFamily.sans}, sans-serif;
-    font-size: ${theme.fontSize.titleSans};
-    line-height: ${theme.lineHeight.titleSans};
-    letter-spacing: ${theme.letterSpacing.sans};
-    width: 100%;
-    overflow: hidden;
-  }
-
-  & > div:last-of-type {
-    width: 40px;
-    margin-left: 20px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    height: auto;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-top: 2.5px solid #000;
-
-    & > div:first-of-type {
-      font-size: ${theme.fontSize.m_titleSans};
-      line-height: ${theme.lineHeight.m_titleSans};
-      width: 100%;
-    }
-
-    & > div:last-of-type {
-      width: 20px;
-    }
-  }
-`;
+const NoteData: TNoteBannerSampleData = [
+  {
+    index: 1,
+    content:
+      'The TV series aired in 1990 recorded the highest ratings ever in Thai broadcasting history.',
+  },
+  {
+    index: 2,
+    content: 'Serialized in Sri Siam magazine in 1965, first volume published in 1969.',
+  },
+  {
+    index: 3,
+    content: `<span>3</span>
+    <span>
+      3 films were made into films, among which 2 films of the same name (1935)
+      adapted from
+      <b>Buttercup Flower and Flower Diary</b> (1939) adapted from Bellflower remains
+      as a film due to efforts such as the discovery of NFAJ (formerly NFC).{' '}
+      <b>Buttercup Flower</b>
+      depicts the homosexual relationship of girls, and was screened at the 18th Tokyo
+      International Lesbian & Gay Film Festival immediately after the discovery and
+      restoration of NFC.
+      <a
+        href="https://rainbowreeltokyo.com/2009/program/pre/01_fukujyusou.html"
+        target="_blank"
+      >
+        https://rainbowreeltokyo.com/2009/program/pre/01_fukujyusou.html
+      </a>
+    </span>`,
+  },
+];
 
 const id = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
@@ -457,7 +469,7 @@ const id = (): JSX.Element => {
 
   useEffect(() => {
     setHeaderColor('#D2FFFF');
-  }, []);
+  });
 
   return (
     <React.Fragment>
@@ -501,7 +513,7 @@ const id = (): JSX.Element => {
             <div css={ContentWrapper}>
               <div>
                 <div>
-                  <Image src={SampleImage1} alt="sample_image" />
+                  <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
                   <span>
                     Chulayarnnon Siriphol, <b>ANG48</b> (2022), still. Photo by Jutarat Ninnaihin.
                     Photo Courtesy of the artist and Bangkok CityCity Gallery.
@@ -570,81 +582,8 @@ const id = (): JSX.Element => {
                 <span>Note</span>
               </div>
               <div>
-                <div>
-                  <span>1</span>
-                  <span>
-                    The TV series aired in 1990 recorded the highest ratings ever in Thai
-                    broadcasting history.
-                  </span>
-                </div>
-                <div>
-                  <span>2</span>
-                  <span>
-                    Serialized in Sri Siam magazine in 1965, first volume published in 1969.
-                  </span>
-                </div>
-                <div>
-                  <span>3</span>
-                  <span>
-                    3 films were made into films, among which 2 films of the same name (1935)
-                    adapted from
-                    <b>Buttercup Flower and Flower Diary</b> (1939) adapted from Bellflower remains
-                    as a film due to efforts such as the discovery of NFAJ (formerly NFC).{' '}
-                    <b>Buttercup Flower</b>
-                    depicts the homosexual relationship of girls, and was screened at the 18th Tokyo
-                    International Lesbian & Gay Film Festival immediately after the discovery and
-                    restoration of NFC.
-                    <a
-                      href="
-                                    https://rainbowreeltokyo.com/2009/program/pre/01_fukujyusou.html"
-                      target="_blank"
-                    >
-                      https://rainbowreeltokyo.com/2009/program/pre/01_fukujyusou.html
-                    </a>
-                  </span>
-                </div>
-                <div>
-                  <span>4</span>
-                  <span>
-                    Of course, none of these relationships are morally right or good, and they all
-                    have their downsides. Nevertheless, it is radical in that it builds something
-                    new in a place different from the male or heterosexual patriarchal point of
-                    view. The deepening of this discussion can be referred to in “Chapter 11 Girls'
-                    School Culture and Misogyny” in Chizuko Ueno's book{' '}
-                    <b>Hate Misogyny (Onna Girai -Nippon No Misogyn)</b>.
-                  </span>
-                </div>
-                <div>
-                  <span>5</span>
-                  <span>
-                    It is a discourse that reorganizes the identity of women in the rear as
-                    war-related under wartime by emphasizing the role of women who did not
-                    participate in the war under the total mobilization system during the Japanese
-                    imperialist war in rear management, education, and mobilization of materials.
-                    Kwon Myeongah, <b>The Women in the Rear Guard, New Woman, and Spy</b>,
-                    Sang-heo-hak-bo, 2004, vol.12, pp. 251-282.
-                  </span>
-                </div>
-                <div>
-                  <span>6</span>
-                  <span>
-                    Butler discusses this in several books, but in particular, she discusses it
-                    intensively in <b>Hate Speech</b> (Ryu Min-seok, Aleph publishing) and Gender
-                    Demolition (Cho Hyun-jun, Moonji Publishing Co., Ltd.).
-                  </span>
-                </div>
-                <div>
-                  <span>7</span>
-                  <span>
-                    Judith Butler, <b>Undoing Gender</b>, pp. 267.
-                  </span>
-                </div>
-                <div>
-                  <span>8</span>
-                  <span>
-                    Chizuko Ueno, <b>Hate Misogyny (Onna Girai -Nippon No Misogyn)</b>, pp. 212.
-                  </span>
-                </div>
+                {NoteData &&
+                  NoteData.map((el, _i) => <Note key={_i} index={el.index} content={el.content} />)}
               </div>
             </div>
             <div css={BioContainer}>
@@ -661,96 +600,22 @@ const id = (): JSX.Element => {
                 </p>
               </div>
             </div>
-            <div
-              css={ArtistBanner('#e6ffc5')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/alaa_abu_asad',
-                })
-              }
-            >
-              <div>
-                <span>Alaa Abu Asad</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#FFE8FF')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/mooni_perry',
-                })
-              }
-            >
-              <div>
-                <span>Mooni Perry</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#EAE8FF')}
-              onClick={() => {
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/chulayarnnon_siriphol',
-                });
-              }}
-            >
-              <div>
-                <span>Chulayarnnon Siriphol</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#E8FFF5')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/tj_shin',
-                })
-              }
-            >
-              <div>
-                <span>TJ Shin</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#D2FFFF')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha/hwang_miyojo',
-                })
-              }
-            >
-              <div>
-                <span>Hwang Miyojo</span>
-              </div>
-              <div>
-                <Image src={ArrowRight} alt="arrow_right" />
-              </div>
-            </div>
-            <div
-              css={ArtistBanner('#fff')}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha',
-                })
-              }
-            >
-              <div>
-                <span>CHANG Eunha</span>
-              </div>
-              <div>
-                <Image src={ArrowLeft} alt="arrow_left" />
-              </div>
-            </div>
+            {ArtistBannerData &&
+              ArtistBannerData.map((el, _i) => (
+                <ArtistBanner
+                  key={_i}
+                  name={el.name}
+                  pathname={el.pathname}
+                  isCurator={el.isCurator}
+                  colorCode={el.colorCode}
+                />
+              ))}
+            <ArtistBanner
+              name={'CHANG Eunha'}
+              pathname={'chang_eunha'}
+              isCurator={true}
+              colorCode={'#fff'}
+            />
           </div>
         </div>
       </PageLayout>
