@@ -222,7 +222,7 @@ const NewsModule = () => {
   return (
     <div css={NewsModuleContainer}>
       <div>
-        <img src="../../static/images/news/news_1.png" />
+        <img src="../../static/images/news/news_1.png" alt="news_1" />
       </div>
       <div>2022. 11. 28. </div>
       <div>A New Vision of Vision</div>
@@ -238,7 +238,7 @@ const NewsModule = () => {
   );
 };
 
-const News = () => {
+const News = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 

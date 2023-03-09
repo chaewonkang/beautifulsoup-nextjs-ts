@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../../../../styles/theme';
-
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 /* comps */
@@ -10,6 +10,11 @@ import { PageLayout } from '../../../../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../../state/index';
+
+/* images */
+import SampleImage1 from '/public/images/about_1.png';
+import ArrowRight from '/public/images/arrowRight.png';
+import ArrowLeft from '/public/images/arrowLeft.png';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -444,15 +449,15 @@ const ArtistBanner = (colorCode: string) => css`
   }
 `;
 
-const id = () => {
+const id = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   const router = useRouter();
   const id = router.query.id as string;
 
-  React.useEffect(() => {
+  useEffect(() => {
     setHeaderColor('#D2FFFF');
-  });
+  }, []);
 
   return (
     <React.Fragment>
@@ -496,8 +501,7 @@ const id = () => {
             <div css={ContentWrapper}>
               <div>
                 <div>
-                  {' '}
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/hwang_1.png" />
+                  <Image src={SampleImage1} alt="sample_image" />
                   <span>
                     Chulayarnnon Siriphol, <b>ANG48</b> (2022), still. Photo by Jutarat Ninnaihin.
                     Photo Courtesy of the artist and Bangkok CityCity Gallery.
@@ -557,283 +561,6 @@ const id = () => {
                     World War II. This silent film is a flashback of individualized memories and a
                     representation of public memory about colonial relations, intertextually
                     constructing each other's identity and memory between history and individuals.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  {' '}
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/hwang_2.png" />
-                  <span>
-                    Chulayarnnon Siriphol, <b>ANG48</b>
-                    {} (2022), still. Photo by Jutarat Ninnaihin. Photo Courtesy of the artist and
-                    Bangkok CityCity Gallery.
-                  </span>
-                </div>
-                <div>
-                  <p>
-                    A video in which a person who appears to be a doctor explains about exotic
-                    edible snails is inserted. It is said that giant snails brought from Africa to
-                    be raised for food while Japan built military bases in Southeast Asia reproduced
-                    at a frightening rate and spread throughout Southeast Asia. This video, which
-                    appears to be plausible information about snails, turns out to be an
-                    advertisement for snail essence cosmetics, which soon became a product of the
-                    beauty industry. And the woman in the cross-edited silent film gives birth to a
-                    giant snail that glows golden while fighting with a Japanese soldier. The giant
-                    snail's father, the Japanese soldier, leaves for his home country with the
-                    defeat, and the giant snail's mother misses him while making mochi with the
-                    recipe he taught. The snail girl born between Japan and Thailand and destined to
-                    become a market product is Angsumalin. Angsumalin is also the heroine of the
-                    popular novel <b>Khu Kam</b> (Thommayanti, 1969)<span>&sup1;</span>, which is
-                    familiar to Thai people enough to have been adapted nine times
-                    <span>&sup2;</span>, including movies, TV series, and musicals. Angsumalin is
-                    engaged to Banus, an elite Thai man studying abroad in England, but her heart is
-                    also shaken by Kobori, a young Japanese naval officer who is devoted and
-                    pure-hearted, who actively approaches her. Her father, a right-wing political
-                    leader, forced her to marry Kobori, but she couldn't even sort her mind with
-                    Banus. The artist synthesizes his own face with Angsumalin faces from films
-                    adapted from <b>Khu Kam</b>
-                    , which were adopted in the 1970s, 80s, 90s, and 2010s. The audience sees the
-                    artist's face attached to Angsumalin's body, which is shaken and torn between
-                    Banus and Kobori, Thailand and Japan. Angsumalin shows strong hostility to
-                    Kobori when she meets him because he is a foreigner, but their relationship soon
-                    turns into a friendly one. Angsumalin cannot decide her own destiny. It only
-                    confuses between Banus or father, and Kobori. By cross-editing newsreel and
-                    documentary footage documenting the boycott of Japanese goods led by the Thai
-                    government in the 1970s, and the reminiscences of her mother, who was unable to
-                    make or sell mochi anymore, the author cross-edited post-war right-wing
-                    nationalism and imperial Japan's colonialism which highlights the difficulties
-                    Angsumalin was facing not being able to do anything between them. This
-                    difficulty is repeated in recent Thai films throughout the ages and is also
-                    found in Taiwanese films that experienced Japanese colonial history.
-                    <br />
-                    <br />
-                    Confessing the irony of her birth in Japanese, Angsumalin makes copies into
-                    dozens of bodies and heads for space. In space, can the ironies and difficulties
-                    derived from colonialism and post-war nationalism reduce? Can Angsumalin be
-                    completely free between the boundaries of history? Drenched in giant snail
-                    juice, Angsumalin becomes an idol dancing in a sailor uniform. Just like the
-                    fertility of giant snails spreading across Southeast Asia at an alarming rate,
-                    marketization and commercialization break down all boundaries and unite us all.
-                    The most powerful force that unites everyone while expanding their territory as
-                    vigorously as the giant snail is now is the song and dance of idols. The 48 idol
-                    groups in Tokyo, Osaka, Shanghai, Jakarta, and Bangkok exist everywhere in a
-                    different way from imperialism, which used force while singing — or selling —
-                    love, friendship, and courage. From the beginning of the 20th century, the
-                    National Socialist movement, the radical leftist movement in Europe, North
-                    America, and Japan, and the democracy movement in the Third World all shouted
-                    and sang together, but the ‘The Internationale’, which could not be realized,
-                    finally lifted the body of Angsumalin in a sailor suit and realized through. Is
-                    it realized? The artist doubts and disturbs ‘The Internationale’ realized at the
-                    same time by inserting images of statues of girls from various parts of Asia and
-                    a performance video in which Angsumalin wears a sailor suit and visits a shrine
-                    dedicated to the love between the Japanese soldier and a Thai woman and offers
-                    homemade mochi. The editing and arrangement of the two-channel video further
-                    intensifies the disturbance by mixing and synchronizing their order. Here's the
-                    sobering reality. Half of Angsumalin came from Japan. Since modern times, our
-                    daily lives and perceptions have been composed of colonialism and imperialism.
-                    No one is free from this perplexing cul-de-sac. Like the spiral pattern on the
-                    shell of a giant snail, it repeats endlessly in a spiral like the spiral
-                    staircase of the Bangkok Art Center, modeled after the Guggenheim in New York.
-                    This is the core of the criticality of Chulayarnnon Siriphol's work, which
-                    connects colonialism, which still leads to market domination through popular
-                    culture, with his own historical genealogy, and expresses himself by dividing
-                    and fragmenting his body.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  {' '}
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/hwang_3.png" />
-                  <span>
-                    Mooni Perry, <b>Binlang Xishi</b> (2021-22), still.
-                  </span>
-                </div>
-                <div>
-                  <p>
-                    <span>
-                      <b>Mapping with Mooni Perry: Genre Yuri or GL (Girls' Love)</b> - Radical
-                      Queerness in GL
-                    </span>
-                    <br />
-                    <br />
-                    After watching the film
-                    <b>The People of the Ataka Family</b> (directed by Seiji Hisamatsu, 1952)
-                    starring Kinuyo Tanaka, which was based on a novel by Nobuko Yoshiya, I
-                    struggled to find other films based on novels by the same author for a while.{' '}
-                    <b>The People of the Ataka Family</b> is one of the tendencies of Japanese films
-                    produced during the post-war allied occupation period after the defeat, the fall
-                    of the old era (symbolized by damaged patriarchy, old capital, and old class)
-                    and the new era (represented by women and the public) which can be seen as a
-                    movie about a lonely prelude, but what caught attention most of all was the
-                    relationship between the women in the movie. Kuniko, who has situated a unique
-                    position within the Ataka household as a caretaker for her disabled husband, a
-                    manager of the household's affairs akin to her father who was a butler, and a
-                    mediator between the employees and the family, finds solace and support in her
-                    interactions with Masako, the wife of her husband's brother, as they navigate
-                    the intricacies of their familial dynamics and societal expectations.
-                    Ultimately, both women make the bold decision to break away from their
-                    traditional roles and dissolve their family ties, opting instead to relinquish
-                    their inherited wealth and power to the masses. The story and the ending of the
-                    film invites the (female) audience to reconstruct the movie as a secret
-                    solidarity of women through the lens of the film The People of the Atakas. The
-                    original author, Nobuko Yoshiya, began submitting novels with girls as the main
-                    characters to magazines from the early 1900s when she was a teenager, and
-                    continued to write novels about women until her later years in the 1970s.{' '}
-                    <b>The Flower Stories (Hanamonogatari)</b> series, which has been made into
-                    several films as well, is a series of short stories that depict the psychology
-                    and relationships of girls with different flowers
-                    <span>&sup3;</span>, for about 10 years, it was serialized in two magazines with
-                    enthusiastic support from the girls of the time. In particular, in the latter
-                    half of the series, as the stories of featuring strong ties between girls and
-                    homosexual themes became more prevalent and resonated with readers,, it is
-                    considered the origin and start of the genre known as Yuri that has seen a
-                    resurgence in popularity since the 1970s. ‘Girls’ schools’, which are based on a
-                    conservative and patriarchal culture of gender separation,, allow female
-                    students to reflect on themselves and form relationships outside of heterosexual
-                    norms.
-                    <span>&#8308;</span> Nobuko Yoshiya's <b>The Women's Classroom</b> (1939), which
-                    has been made into films and stage plays several times, is set during the
-                    Sino-Japanese War. Although the title <b>The Women in the Rear Guard</b> was
-                    created to emphasizes the responsibility and duty of women in the rear on behalf
-                    of men drafted for war<span>&#8309;</span> to reorganize women, the women in the
-                    rear guard focuses on identity, self-reliance, and relationships between women
-                    as independent individuals, separated from men or husbands, in the context of
-                    time and space without men.
-                    <br />
-                    <br />
-                    Mooni Perry's previous works, which combine video, installation, and
-                    performance, <b>Binlang Xishi</b> (2021–22) and <b>Missing</b> (2022–) show the
-                    ambivalence of culture occupied by women — as inferior beings in the patriarchal
-                    order — or others associated with women, and explores radical possibilities
-                    through its appropriation and parody. The combination of the status and
-                    sexuality of women selling betel nut in <b>Binlang Xishi</b> brings the image to
-                    the fore, so that the women selling betel nut (binlang) rather play and perform
-                    the existing image in full. By bringing the concept of dirt and inferiority to
-                    the fore, it makes the separation of ‘dirty’ and ‘clean’ unfamiliar, rather than
-                    accepting the existing image, and makes us ask questions and deconstructive
-                    questions about the process of the separation being rescued. Missing borrows and
-                    mixes the frame of reverse harem and the layout design of role playing games in
-                    female subcultures including same-sex/interspecies romance, detective stories
-                    from popular narratives, time travel genre and popular movie subplots based on
-                    Chinese tales, and animation which conducts a critique of radical ecofeminist
-                    positions on anthropocentrism and interspecies inequality. According to Judith
-                    Butler, the process of receiving, appropriating, and accepting norms is the
-                    process by which the subject, that is, the speaking “I” is formed.
-                    <span>&#8310;</span> ‘I’ cannot help but be formed within the existing norms,
-                    and the possibility of having other performativity by actively appropriating the
-                    norms also comes from this process of appropriation. Butler speaks of
-                    appropriation moving between rejection and absorption of existing norms:
-                    “Antigone's autonomy is achieved through the appropriation of the voice of
-                    authority of the person she stands against, an appropriation that bears within
-                    herself both the rejection and the absorption of that very authority.”
-                    <span>&#8311;</span> Judith Butler responded to discussions criticizing the
-                    performance of New York ball culture in the 1990s that borrowed existing
-                    heterosexual norms or appropriated the gender role of heterosexual relationships
-                    and the conservatism of the desires of gays, lesbians, transgenders, and drag
-                    queens who participated in it: “In other words, after all, the drag queen,
-                    molded for us and filmed for us, is a figure who both appropriates and subverts
-                    racist, misogynistic and homophobic norms of oppression. But how can we explain
-                    this ambivalence?
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  {' '}
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/hwang_4.png" />
-                  <span>
-                    Mooni Perry, <b>Mapping with Mooni Perry: Genre Yuri or GL (Girls' Love)</b>{' '}
-                    (2022), still.
-                  </span>
-                </div>
-                <div>
-                  <p>
-                    This ambivalence is not the kind of ambivalence that first appears as
-                    appropriation and later as subversion. Sometimes the two appear simultaneously,
-                    sometimes such ambivalence is caught in an insoluble tension, and sometimes
-                    fatally a nonsubversive appropriation takes place.” We cannot, by fate, say what
-                    is radical or conservative. It is to create radical moments and actions while
-                    questioning how they are composed within the repetition, arrangement, and
-                    rearrangement of performance within and outside the network of semantics and
-                    relationships of norms. In Mooni Perry's works, the genre frameworks of popular
-                    culture and subculture, which are familiar and cannot be called critical or
-                    radical in themselves, are appropriated and parodied, allowing us to look into
-                    existing powers and at the same time construct new semantic networks.
-                    <br />
-                    <br />
-                    Mooni Perry's new work{' '}
-                    <b>Mapping with Mooni Perry: Genre Yuri or GL (Girls' Love)</b> explores the
-                    female-only subculture of yuri or GL. More precisely, it explores the queer
-                    radicality of GL. Showing the methodology of appropriating the images and frames
-                    of existing popular culture and subculture through a 3D map as a collage of
-                    text, literally mapping, drawing a map itself is the core of this work. This map
-                    begins with Yoshiya Nobuko's <b>Flower Stories (Hanamonogatari)</b> and
-                    discusses the characteristics of a contemporary subculture in which consumers
-                    and producers are not separated and the form of ‘consumption’ becomes more
-                    important, and the ‘Omegaverse’ becomes more important, and worldview, which can
-                    be seen as the most recently observed form of imagination in relation to gender,
-                    sexuality, and women. Vertically and horizontally, it leads to a cross-cultural
-                    study of regional, post-colonial, and postmodern capitalist contemporaneity, the
-                    differences and commonalities between GL, queer works, and BL, and the United
-                    States and Japan. However, this map is not simply a commentary on GL culture. It
-                    is a work to dismantle the monopoly status of heterosexual romantic love since
-                    modern times and to engrave the genealogy of relationships between women in the
-                    history of construction of modernity, plus an attempt to feminize modern queer
-                    history. In addition, BL and GL, which have a commonality of a culture almost
-                    exclusively occupied by women, are contrasted, focusing on the distance between
-                    the character (s) in the work and the creator/enjoyer, and the party. In this
-                    mapping of Mooni Perry, GL is positioned as a text that has a direct and deep
-                    relationship with women's reality, and as a mutually constructive text in which
-                    women create their own ‘party’.
-                    <br />
-                    <br />
-                    While having a relationship with the reality of GL, Mooni Perry, who vigorously
-                    explored non-normative and fluid radicality, attaches the modern otaku culture
-                    that has built a closed, self-sufficient, and consuming world that is
-                    increasingly disconnected from reality, as discussed in{' '}
-                    <b>Animalizing Postmodern</b> by Azuma Hiroki. This montage or collage looks
-                    somewhat different from the development of the previous mapping. When the
-                    previous map drawing was a chronological yet organic flow that converges into
-                    one point, female homosexual culture and GL creation/enjoyment from the early
-                    modern times to recent subcultures in Korea, this ‘animalized postmodern’ otaku
-                    culture is separated from reality and buried in the self-sufficient genre
-                    culture itself, and in a broad sense, it is identified and subsumed as
-                    neoliberal consumption. What's the problem when these collages collide? Is this
-                    ‘animalizing postmodern’ otaku culture critically emerging in contrast to
-                    current GL culture, or is it a part of the development of GL culture that Mooni
-                    Perry is concerned about while mapping? The otaku culture that Azuma Hiroki
-                    discusses is distinct from the GL culture discussed in Mapping with Mooni Perry:
-                    Genre Yuri or GL (Girls' Love) in that it is a male-centered culture for both
-                    creators and enjoyers, and that it is a reality glass with closure. However, the
-                    effect of the structure of this mapping, which consists of collisions of
-                    quotations and texts without any other explanation of the connection, seems to
-                    be both a privilege of GL and a concern for the future. After building the
-                    radicality of GL culture centering on the dismantling of heterosexual culture,
-                    the feminization of queer history, and the party that is distinct from BL, Azuma
-                    Hiroki was added, and while emphasizing the uniqueness of GL culture, it manages
-                    to add the ambivalence of concern about future developments.
-                    <br />
-                    <br />
-                    As women build and reciprocally rebuild their identities, GL culture has
-                    secretly expanded its radical imagination. The discovery of the imagination of
-                    GL culture, which starts from familiar relationships but is not returned
-                    anywhere, and the ambivalent position of expectations and concerns about
-                    unpredictable future developments reminds Chizuko Ueno's discussion of girls'
-                    school culture. As women build and reciprocally rebuild their identities, GL
-                    culture has secretly expanded its radical imagination. Mooni Perry articulates
-                    and connects the imagination of GL culture, which originates from familiar
-                    relationships but is not returned anywhere, to feminist science fiction. This
-                    article ends with a sentence about the unknown future brought by Chizuko Ueno's
-                    'Girls' School Culture'. “In the world of media, the girls’ school culture is
-                    expanding its territory deeply and widely. … What will happen when this dark
-                    continent, which has been a blind spot for men, suddenly appears in front of
-                    their eyes, just as the fantasy Atlantis sometimes rises from the sea?”
-                    <span>&#8312;</span>
                   </p>
                 </div>
               </div>
@@ -946,10 +673,7 @@ const id = () => {
                 <span>Alaa Abu Asad</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -964,10 +688,7 @@ const id = () => {
                 <span>Mooni Perry</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -982,10 +703,7 @@ const id = () => {
                 <span>Chulayarnnon Siriphol</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -1000,10 +718,7 @@ const id = () => {
                 <span>TJ Shin</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -1018,10 +733,7 @@ const id = () => {
                 <span>Hwang Miyojo</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -1036,10 +748,7 @@ const id = () => {
                 <span>CHANG Eunha</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowLeft.png"
-                  alt="왼 쪽 화살표"
-                />
+                <Image src={ArrowLeft} alt="arrow_left" />
               </div>
             </div>
           </div>

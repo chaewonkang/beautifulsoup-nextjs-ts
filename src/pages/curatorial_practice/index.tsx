@@ -1,5 +1,5 @@
 import React from 'react';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 import theme from '../../styles/theme';
 import Image from 'next/image';
@@ -11,6 +11,9 @@ import { useRouter } from 'next/router';
 /* states */
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
+
+import arrowDownImage from 'public/images/arrowDown.png';
+import SampleImage1 from 'public/images/about_1.png';
 
 type TKeywordArray = string[];
 type TCategoryArray = string[];
@@ -29,6 +32,32 @@ const categoryArr: TCategoryArray = [
   'painting',
   'technology',
 ];
+
+const Marquee = css`
+  width: 1600vw;
+  position: relative;
+  overflow: hidden;
+  --offset: 20vw;
+  --move-initial: calc(0);
+  --move-final: calc(-50% + var(--offset));
+  display: flex;
+  align-items: center;
+
+  & > div {
+    width: fit-content;
+    display: inline-block;
+    position: relative;
+    overflow: hidden !important;
+    transform: translate3d(var(--move-initial), 0, 0);
+    animation-play-state: paused;
+    animation-play-state: running;
+  }
+
+  @media only screen and (max-width: ${theme.size.mobile}) {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+`;
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -276,7 +305,7 @@ const ModuleContainer = css`
     & > div:first-of-type {
       min-height: 230px;
       height: 30vh;
-      padding-right: 0;
+      padding-right: 0;0
     }
   }
 `;
@@ -288,6 +317,7 @@ const ModuleTextWrapper = css`
 
   & > div:first-of-type {
     height: 70px;
+
     border-bottom: 2.5px dashed #000;
     width: 100%;
     display: flex;
@@ -430,7 +460,7 @@ const Module = () => {
   );
 };
 
-const CuratorialPractice = () => {
+const CuratorialPractice = (): JSX.Element => {
   const router = useRouter();
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
@@ -461,20 +491,20 @@ const CuratorialPractice = () => {
           <div css={keywordContainer}>
             <ul>
               {keywordArr &&
-                keywordArr.map((el) => {
-                  return <li>{el}&nbsp;/&nbsp;</li>;
+                keywordArr.map((el, _i) => {
+                  return <li key={_i}>{el}&nbsp;/&nbsp;</li>;
                 })}
             </ul>
-            <img src="../../static/images/arrowDown.png" alt="아래 화살표" />
+            <Image src={arrowDownImage} alt="아래 화살표" layout="intrinsic" />
           </div>
           <div css={filterContainer}>
             <ul>
               {categoryArr &&
-                categoryArr.map((el) => {
-                  return <li>{el}&nbsp;/&nbsp;</li>;
+                categoryArr.map((el, _i) => {
+                  return <li key={_i}>{el}&nbsp;/&nbsp;</li>;
                 })}
             </ul>
-            <img src="../../static/images/arrowDown.png" alt="아래 화살표" />
+            <Image src={arrowDownImage} alt="아래 화살표" layout="intrinsic" />
           </div>
           <div css={ContentContainer}>
             <div
@@ -486,7 +516,7 @@ const CuratorialPractice = () => {
               }
             >
               <div>
-                <img src="../../static/images/curators/jolene.jpg" />
+                <Image src={SampleImage1} alt="sample_image" />
               </div>
               <div css={ModuleTextWrapper}>
                 <div>
@@ -512,243 +542,6 @@ const CuratorialPractice = () => {
                     for Seven Curators: empowering, supportive, cooperative, open, fair—Slippery
                     Tongues Sliding Horizons speaks with experiences of navigating multiple
                     languages and existing between fixed categories.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/sofia_duorron',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/sofia.jpg" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>supportive</span>_ seen_but_unnoticed._bodily_ infrastructure_at_work
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Sofía Durrieu, Chaveli Sifre, Choi Yun, Ana María Gómez López, Landa Hernández
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Seen but unnoticed. Bodily infrastructure at work
-                    <br />
-                    In the introduction to Extrastatecraft. The Power of Infrastructure Space Keller
-                    Easterling makes it very clear: infrastructure is not and never has been just
-                    the buildings, highways, transport systems, communications networks, electric
-                    grids and pipelines that allow our bodies to move, interact and generally
-                    function within the confines of finite spaces.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/yun_minhwa',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/yunminhwa.png" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>open+cooperative</span>_ clever_hans_effect
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Yun Choi, Sofía Durrieu, Ana María Gómez López, Chaveli Sifre, Landa Hernández
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Clever Hans Effect is a psychological term derived from the name of a horse,
-                    Hans, who was rumored to be able to read numbers and calculate. When people gave
-                    an arithmetic quiz, Hans answered by striking his hoof on the floor, and was
-                    almost always right. Hans became so popular that researchers eventually visited
-                    to see if Hans really understood numbers and arithmetic. The researchers found
-                    that Hans could not answer the questions correctly when he was away from his
-                    owner and spectators. They concluded that Han’s ability to answer the questions
-                    correctly was due to the gestures of the spectators, who became more and more
-                    excited as the number of horseshoe strikes approached the correct answer. It was
-                    as if people not only gave the horse a quiz, but also gave the correct answer
-                    away.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/jeanette_bisschops',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/bisschops.jpeg" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>open+empowering</span>_ clever_hans_effect
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Goeun Bae, Simnikiwe Buhlungu, Christine Sun Kim, Kang Seung Lee, Alvin Tran,
-                    Butch Palace For the Sun_Ibanjiha, Yeong Ran Kim, Eunsong Kim, Alvin Tran
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Clever Hans Effect is a psychological term derived from the name of a horse,
-                    Hans, who was rumored to be able to read numbers and calculate. When people gave
-                    an arithmetic quiz, Hans answered by striking his hoof on the floor, and was
-                    almost always right. Hans became so popular that researchers eventually visited
-                    to see if Hans really understood numbers and arithmetic. The researchers found
-                    that Hans could not answer the questions correctly when he was away from his
-                    owner and spectators. They concluded that Han’s ability to answer the questions
-                    correctly was due to the gestures of the spectators, who became more and more
-                    excited as the number of horseshoe strikes approached the correct answer. It was
-                    as if people not only gave the horse a quiz, but also gave the correct answer
-                    away.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/honggyun_mok',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/mok.jpeg" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>fair</span>_on_fair: _remnants,_from_the_five
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Choi Seungjoon, Gabriela Golder, Ha Saetbyul, Kim Haemin, Lee Wonho, Werker
-                    Collective, Nam Woong
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    The first man who, having enclosed a piece of ground, bethought himself of
-                    saying this is mine and found people simple enough to believe him, was the real
-                    founder of civil society…Beware of listening to this impostor; you are undone if
-                    you once forget that the fruits of the earth belong to us all, and the earth
-                    itself to nobody.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/chang_eunha',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/chang.png" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>empowering</span>
-                        _autophagy:_eating_in_its_destructive_and_creative_nature
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>Alaa Abu Asad, Mooni Perry,Chulayarnnon Siriphol, TJ Shin, Hwang Miyojo</p>
-                </div>
-                <div>
-                  <p>
-                    How can love of life coexist with love of violence?
-                    <br /> How was this strange link between care and conquest forged?
-                    <br /> - Jane Bennett, Vibrant Matter: A Political Ecology of Things
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/manique_hendricks',
-                })
-              }
-            >
-              <div>
-                <img src="../../static/images/curators/hendricks.jpeg" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
-                        <span>cooperative</span>
-                        _for_our_common_ emotional_goals
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Bin Koh, Emirhakin, Young Joon Kwak, Philth Haus, Art.Goss, Charlotte Rhode,
-                    Haitian Ma, Zippora Elders, Ka-Tjun Hau
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    For Our Common Emotional Goals
-                    <br />
-                    The three cups tarot card is often an image of three women dancing and raising
-                    their cups for a toast. It represents the celebration of friendship, sisterhood,
-                    connection, abundance, cooperation and creative collaborations.
                   </p>
                 </div>
               </div>

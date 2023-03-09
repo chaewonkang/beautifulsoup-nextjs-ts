@@ -1,8 +1,9 @@
-import React from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../src/styles/theme';
-
+import Image from 'next/image';
 import { useRouter } from 'next/router';
+
+import SampleImage1 from '/public/images/about_1.png';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -332,12 +333,6 @@ const MainBanner = () => {
               <span>curators</span>
               _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
               _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
           </div>
         </h2>
@@ -352,7 +347,7 @@ const MainBanner = () => {
           }
         >
           <div>
-            <img src="../static/images/curators/jolene.jpg" />
+            <Image src={SampleImage1} alt="sample_image" />
           </div>
           <div css={BannerModuleTextBox}>
             <div>
@@ -372,214 +367,6 @@ const MainBanner = () => {
                 Seven Curators: empowering, supportive, cooperative, open, fair—Slippery Tongues
                 Sliding Horizons speaks with experiences of navigating multiple languages and
                 existing between fixed...
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/sofia_duorron',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/sofia.jpg" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>Sofía Dourron</span>
-            </div>
-            <div>
-              <p>Sofía Durrieu, Chaveli Sifre, Choi Yun, Ana María Gómez López, Landa Hernández</p>
-            </div>
-            <div>
-              <p>
-                Seen but unnoticed. Bodily infrastructure at work
-                <br />
-                In the introduction to Extrastatecraft. The Power of Infrastructure Space Keller
-                Easterling makes it very clear: infrastructure is not and never has been just the
-                buildings, highways, transport systems, communications networks, electric grids and
-                pipelines that allow our bodies to move, interact and generally function within the
-                confines of finite spaces.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/yun_minhwa',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/yunminhwa.png" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>YUN Minhhwa</span>
-            </div>
-            <div>
-              <p>Hyejin Jo, Insook Bae, Mirim Chu, Minhwa Yun</p>
-            </div>
-            <div>
-              <p>
-                Clever Hans Effect
-                <br />
-                Clever Hans Effect is a psychological term derived from the name of a horse, Hans,
-                who was rumored to be able to read numbers and calculate. When people gave an
-                arithmetic quiz, Hans answered by striking his hoof on the floor, and was almost
-                always right. Hans became so popular that researchers eventually visited to see if
-                Hans really understood numbers and arithmetic.
-              </p>
-            </div>
-          </div>
-        </div>{' '}
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/jeanette_bisschops',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/bisschops.jpeg" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>Jeanette Bisschops</span>
-            </div>
-            <div>
-              <p>
-                Simnikiwe Buhlungu, Alvin Tran, Kang Seung Lee, Goeun Bae, Ibanjiha, Eunsong Kim,
-                Yeong Ran Kim, Alvin Tran
-              </p>
-            </div>
-            <div>
-              <p>
-                We Cry Poetry
-                <br />
-                Growing up, I was a child constantly engrossed in stories. Growing up quite insular
-                and not allowed to watch much tv, I would get new stacks of books at the local
-                library almost every weekend. But while I had a passion for words and the worlds
-                they create, it was hard for me to access more peculiar, playful and poetic works.
-                Raised in a household and a society that idolizes rationality, poetry felt both
-                frivolous and terrifyingly open-ended.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/honggyun_mok',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/mok.jpeg" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>MOK Honggyun</span>
-            </div>
-            <div>
-              <p>
-                Seungjoon Choi, Werker Collective, Lee Wonho, Ha Saet-byul, Kim Haemin, Gabriela
-                Golder, Nam Woong, Francis Annagu
-              </p>
-            </div>
-            <div>
-              <p>
-                On Fair: Remnants, From the Five
-                <br />
-                The first man who, having enclosed a piece of ground, bethought himself of saying
-                this is mine and found people simple enough to believe him, was the real founder of
-                civil society…Beware of listening to this impostor; you are undone if you once
-                forget that the fruits of the earth belong to us all, and the earth itself to
-                nobody.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/chang_eunha',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/chang.png" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>CHANG Eunha</span>
-            </div>
-            <div>
-              <p>Alaa Abu Asad, Mooni Perry, TJ Shin, Chulayarnnon Siriphol, Hwang Miyojo</p>
-            </div>
-            <div>
-              <p>
-                Autophagy: Eating in Its Destructive and Creative Nature
-                <br />
-                How can love of life coexist with love of violence?
-                <br /> How was this strange link between care and conquest forged?
-                <br /> - Jane Bennett, Vibrant Matter: A Political Ecology of Things
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/manique_hendricks',
-            })
-          }
-        >
-          <div>
-            <img src="../static/images/curators/hendricks.jpeg" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>Manique Hendricks</span>
-            </div>
-            <div>
-              <p>
-                Bin Koh, Emirhakin, Young Joon Kwak, Philth Haus, Art.Goss, Charlotte Rhode, Haitian
-                Ma, Zippora Elders, Ka-Tjun Hau
-              </p>
-            </div>
-            <div>
-              <p>
-                For Our Common Emotional Goals
-                <br />
-                The three cups tarot card is often an image of three women dancing and raising their
-                cups for a toast. It represents the celebration of friendship, sisterhood,
-                connection, abundance, cooperation and creative collaborations.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div css={BannerModuleContainer}>
-          <div></div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span></span>
-            </div>
-            <div>
-              <p></p>
-            </div>
-            <div>
-              <p>
-                <span></span>
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../../../styles/theme';
+import Image from 'next/image';
 
 import { useRouter } from 'next/router';
 
@@ -10,6 +11,10 @@ import { PageLayout } from '../../../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../state/index';
+
+/* images */
+import SampleImage1 from '/public/images/about_1.png';
+import ArrowRight from '/public/images/arrowRight.png';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -454,7 +459,7 @@ const ArtistBanner = (colorCode: string) => css`
   }
 `;
 
-const id = () => {
+const id = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   const router = useRouter();
@@ -558,7 +563,7 @@ const id = () => {
 
               <div>
                 <div>
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/1.png" />
+                  <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
                   <span>
                     Mooni Perry, <b>Binlang Xishi: chapter 2</b>, 2021-2022, single-channel video,
                     16min 22sec (still).
@@ -616,7 +621,7 @@ const id = () => {
               </div>
               <div>
                 <div>
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/4.jpeg" />
+                  <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
                   <span>
                     Alaa Abu Asad, <b>Japanese knotweed in blossom</b>
                     (right), 2022, Ghent.
@@ -657,7 +662,7 @@ const id = () => {
               </div>
               <div>
                 <div>
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/2.png" />
+                  <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
                   <span>
                     Chulayarnnon Siriphol, <b>ANG48</b>, 2022, single-channel HD video, 25 min.
                     (still) Collection of the Artist and Bangkok CityCity Gallery, commissioned by
@@ -742,7 +747,7 @@ const id = () => {
 
               <div>
                 <div>
-                  <img src="../../../static/images/curatorialPractice/chang_eunha/3.jpeg" />
+                  <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
                   <span>
                     TJ Shin, <b>Series from Untitled (Self-Portrait)</b>, 2021, digital print from
                     microscope scans.
@@ -930,10 +935,7 @@ const id = () => {
                 <span>Alaa Abu Asad</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -948,10 +950,7 @@ const id = () => {
                 <span>Mooni Perry</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -966,10 +965,7 @@ const id = () => {
                 <span>Chulayarnnon Siriphol</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -984,10 +980,7 @@ const id = () => {
                 <span>TJ Shin</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
             <div
@@ -1002,10 +995,7 @@ const id = () => {
                 <span>Hwang Miyojo</span>
               </div>
               <div>
-                <img
-                  src="../../static/images/curatorialPractice/arrowRight.png"
-                  alt="오른 쪽 화살표"
-                />
+                <Image src={ArrowRight} alt="arrow_right" />
               </div>
             </div>
           </div>

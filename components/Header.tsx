@@ -206,6 +206,13 @@ const HeaderWrapper = (
             }
           }
         }
+
+        & > div:last-of-type {
+          img {
+            transform: ${menuIsOpen ? 'rotate(45deg)' : 'unset'};
+            transition: ease-in 500ms;
+          }
+        }
       }
     }
 

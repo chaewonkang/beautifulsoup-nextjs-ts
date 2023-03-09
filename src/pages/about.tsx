@@ -2,12 +2,18 @@ import React from 'react';
 import { css } from '@emotion/react';
 import theme from '../styles/theme';
 import Image from 'next/image';
+
 /* comps */
 import { PageLayout } from '../../components';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../state/index';
+
+/* images */
+import AboutImage1 from '/public/images/about_1.png';
+import AboutImage2 from '/public/images/about_2.png';
+import AboutImage3 from '/public/images/about_3.png';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -183,7 +189,7 @@ const AboutWrapper = (headerHeight: number) => css`
   }
 `;
 
-const About = () => {
+const About = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
@@ -208,7 +214,7 @@ const About = () => {
           <div css={AboutWrapper(headerHeight)}>
             <div>
               <div>
-                <img src="../static/images/about/about_1.png" />
+                <Image src={AboutImage1} alt="about_1" layout="intrinsic" />
                 <p>Page from the manuscript of Alice’s Adventures Under Ground, 1864</p>
               </div>
               <div>
@@ -236,7 +242,7 @@ const About = () => {
             <div>
               <div>
                 <div>
-                  <img src="../static/images/about/about_2.png" />
+                  <Image src={AboutImage2} alt="about_2" layout="intrinsic" />
                   <p>
                     The cracker cracks a smile at edge of the primordial soup, print, Stephen Gibb,
                     2013
@@ -306,7 +312,7 @@ const About = () => {
             </div>
             <div>
               <div>
-                <img src="../static/images/about/about_3.png" />
+                <Image src={AboutImage3} alt="about_3" layout="intrinsic" />
                 <p>
                   Stained glass window of Alice characters (King and Queen of Hearts) in All Saints’
                   church, Daresbury, Cheshire

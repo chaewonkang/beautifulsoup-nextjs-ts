@@ -280,7 +280,7 @@ const IndexArray = [
   },
 ];
 
-const Index = () => {
+const Index = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   React.useEffect(() => {
@@ -309,10 +309,11 @@ const Index = () => {
           </div>
           <div>
             {IndexArray &&
-              IndexArray.map((el, i) => {
+              IndexArray.map((el, _i) => {
                 return (
                   <IndexModule
-                    index={i + 1}
+                    key={_i}
+                    index={_i + 1}
                     name={el.name}
                     email={el.email}
                     nation={el.nation}

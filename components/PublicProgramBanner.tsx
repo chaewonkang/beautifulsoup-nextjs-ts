@@ -1,6 +1,7 @@
-import React from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../src/styles/theme';
+import Image from 'next/image';
+import SampleImage1 from '/public/images/about_1.png';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -332,12 +333,6 @@ const PublicProgramBanner = () => {
               <span>curators</span>
               _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
               _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
           </div>
         </h2>
@@ -345,7 +340,7 @@ const PublicProgramBanner = () => {
       <div>
         <div css={BannerModuleContainer}>
           <div>
-            <img src="../static/images/publicProgram/pb_1.png" />
+            <Image src={SampleImage1} alt="sample_image" />
           </div>
           <div css={BannerModuleTextBox}>
             <div>
@@ -376,140 +371,6 @@ const PublicProgramBanner = () => {
                 <br /> Artist: Yun Choi @ycuhnoi <br />
                 Associate curator: Miji Lee @miji.e
                 <br /> & Anonymous participants: Gim Ikhyun @kimkhimgim , 김감孫하惠 @qoreanqurl
-              </p>
-            </div>
-          </div>
-        </div>
-        <div css={BannerModuleContainer}>
-          <div>
-            <img src="../static/images/publicProgram/pb_2.png" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              public_program
-              <span>_butch_Palace_for_the_son</span>
-            </div>
-            <div>
-              <p>Seminar Room 3, MMCA Seoul</p>
-            </div>
-            <div>
-              <p>
-                Butch Palace for the Son_Ibanjiha :<br />
-                Audience-participatory workshop performance
-                <br />
-                2021-2022 Korea - Netherlands Joint Project X MMCA Residency Goyang Open Studio
-                Following Ibanjiha’s guidance, participants sculpt {'{'}
-                Butch Palace for the Son{'}'} with clay. Ibanjiha gives on-the-spot critiques of
-                each piece. Through this process, the artist let the performers collectively fathom
-                what0 {'{'}Butch Palace for the Son{'}'} is, whether it even exists (and if so,
-                where to locate it), and how to use it.
-                <br />
-                Performance <br />
-                Dec. 21st (Wed) 3pm~4:30pm (90mins)
-                <br />
-                Ibanjiha, 8 participants, Audience
-                <br />
-                <br />
-                Artist Talk
-                <br />
-                Dec. 22nd (Thur) 2pm~4pm
-                <br />
-                Ibanjiha, Jeanette Bisschops (Independent Curator), Yeong Ran Kim (Performance
-                Studies Scholar), Lee Jihoi (MMCA Curator) *Interpreter: Jaeyong Park
-                <br /> Venue
-                <br /> Seminar Room 3, MMCA Seoul
-              </p>
-            </div>
-          </div>
-        </div>{' '}
-        <div css={BannerModuleContainer}>
-          <div>
-            <img src="../static/images/publicProgram/pb_3.png" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              public_program_
-              <span>slippery_tongues_sliding_horizons</span>
-            </div>
-            <div>
-              <p>LAB111, Amsterdam</p>
-            </div>
-            <div>
-              <p>
-                Jesse Chun, 술래 SULLAE
-                <br />
-                Sung Hwan Kim, Washing Brain and Corn
-                <br />
-                --in musical collaboration with David Michael DiGregorio
-                <br />
-                Nina Djekic, Path Finder I<br />
-                Yun Choi, Where The Heart Goes and a preview of a newly commissioned work
-                <br />
-                <br />
-                <br />
-                Q&A with Yun Choi and Nina Djekic, Curated by Jo-Lene Ong <br />
-                <br />
-                <br />
-                Composed in the key of ‘open’ Slippery Tongues Sliding Horizons speaks with
-                experiences of navigating multiple languages and existing between fixed categories.
-                These experiences common for migrant, diaspora, and peripheral communities create
-                embodied liminal knowledge, articulating a way of relating the world that alters the
-                borders and categories previously structures by western-modern knowledge. This
-                series brings together moving image and text-based works that perform a poetry of
-                inclusion—gestures of opening up singular narratives and attending to porous
-                boundaries—by Jesse Chun, Sung Hwan Kim (in musical collaboration with David Michael
-                DiGregorio), Liz Ferrer & Bow Ty (Niña), Nina Djekić, Isola Tong, Okui Lala,
-                Nasrikah, & PERTIMIG, and new commissions from Finn Maätita & Jerrold Saija, and Yun
-                Choi. Speaking against western universalism, Slippery Tongues Sliding Horizons
-                re-articulates concepts of ‘language’, ‘knowledge’, ‘traditions’, and ‘technology’
-                in our own terms and re-imagines shared horizons between and beyond South Korea, the
-                United States, Indonesia, Maluku, Malaysia, the Philippines, and the Netherlands.
-                <br />
-                <br />
-                <br />
-                Marginality: who names? whose fringes? An else an elsewhere that not merely
-                <br />
-                lies outside the centre but radically striates it.— Trinh T. Minh Ha
-                <br />
-              </p>
-            </div>
-          </div>
-        </div>
-        <div css={BannerModuleContainer}>
-          <div>
-            <img src="../static/images/publicProgram/pb_4.jpg" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              opening
-              <span>_the_five_inclusion_tactics_for_seven_curators</span>
-            </div>
-            <div>
-              <p>beautifulsoup.org</p>
-            </div>
-            <div>
-              <p>
-                The Five Inclusion Tactics for Seven Curators
-                <br />
-                <br />
-                The collaborative project, The Five Inclusion Tactics for Seven Curators, will
-                explore its theme, "Inclusion" and "Innovation," through five subtopics:
-                cooperative, empowering, fair, open, and supportive. These five come from the themes
-                "Inclusion" and "Innovation," which are given by the institution, Art Council Korea,
-                and Dutch Culture. Seven curators break this into five subtopics and investigate how
-                the institutional framework can be recontextualized through curatorial practice.
-                <br />
-                <br />
-                <br />
-                Participating Curators
-                <br />
-                Jeanette Bisschops, Chang Eunha, Sofía Dourron, Manique Hendricks, Honggyun Mok, Ong
-                Jo-Lene, Yun Minhwa
-                <br />
-                <br />
-                <br />
-                Venue and Date 21 DEC 2022 to 30 MAR 2023
-                <br /> @ www.beautifulsoup.org
               </p>
             </div>
           </div>

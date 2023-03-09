@@ -1,8 +1,7 @@
-import React from 'react';
-import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import theme from '../src/styles/theme';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import footerLogoImage from '../public/images/footer.png';
 import NewsLetterSubmit from './NewsLetterSubmit';
@@ -127,7 +126,6 @@ const Container = css`
 `;
 
 const Footer = () => {
-  const router = useRouter();
   return (
     <div css={Container}>
       <NewsLetterSubmit />
@@ -141,31 +139,33 @@ const Footer = () => {
           </h3>
           <h4>
             design and development by{' '}
-            <a href="https://instagram.com/yfactorial" target="_blank">
+            <a href="https://instagram.com/yfactorial" target="_blank" rel="noreferrer">
               y!
             </a>
           </h4>
         </div>
         <div>
           <ul>
-            <li
-              onClick={() =>
-                router.push({
-                  pathname: '/about',
-                })
-              }
-            >
-              About
-            </li>
-            <li>Privacy Policy</li>
+            <Link href="/about">
+              <li>About</li>
+            </Link>
+            <Link href="/privacy">
+              <li>Privacy Policy</li>
+            </Link>
             <li>Institutions</li>
           </ul>
           <ul>
-            <li>Contact</li>
+            <Link href="/contact">
+              <li>Contact</li>
+            </Link>
           </ul>
           <ul>
             <li>
-              <a href="https://instagram.com/beautifulsoup.official" target="_blank">
+              <a
+                href="https://instagram.com/beautifulsoup.official"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Instagram
               </a>
             </li>

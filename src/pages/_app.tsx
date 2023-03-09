@@ -6,12 +6,15 @@ import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import * as gtag from '../lib/ga/gtag';
 import Script from 'next/script';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Head from 'next/head';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
+
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const [queryClient] = React.useState(() => new QueryClient());
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -46,7 +49,11 @@ export default function App({ Component, pageProps }: AppProps) {
           `,
         }}
       />
+      <Head>
+        <link rel="shortcut icon" href="/images/favicon.png" />
+      </Head>
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
         <RecoilRoot>
           <Component {...pageProps} />
         </RecoilRoot>

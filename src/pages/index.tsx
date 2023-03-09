@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import theme from '../styles/theme';
 
 /* comps */
-import { PageLayout, MainBanner, PublicProgramBanner, NewsLetterSubmit } from '../../components';
+import { PageLayout, MainBanner, PublicProgramBanner } from '../../components';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -21,7 +21,7 @@ const Container = (headerHeight: number) => css`
   }
 `;
 
-const Index = () => {
+const Index = (): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
