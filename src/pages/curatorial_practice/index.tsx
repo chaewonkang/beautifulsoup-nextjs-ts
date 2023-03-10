@@ -33,6 +33,16 @@ const categoryArr: TCategoryArray = [
   'technology',
 ];
 
+const MarqueeAnimation = keyframes`
+0% {
+    transform: translate3d(var(--move-initial), 0, 0);
+}
+
+100% {
+    transform: translate3d(var(--move-final), 0, 0);
+}
+`;
+
 const Marquee = css`
   width: 1600vw;
   position: relative;
@@ -521,8 +531,12 @@ const CuratorialPractice = (): JSX.Element => {
               <div css={ModuleTextWrapper}>
                 <div>
                   <h5>
-                    <div className="marquee">
-                      <div className="marquee__inner" aria-hidden="true">
+                    <div css={Marquee}>
+                      <div
+                        css={css`
+                          animation: ${MarqueeAnimation} 100s linear infinite;
+                        `}
+                      >
                         <span>open</span>
                         _slippery_tongues_sliding_horizons
                       </div>
