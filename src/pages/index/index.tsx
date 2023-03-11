@@ -8,6 +8,11 @@ import { PageLayout } from '../../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { indexPageData, TAboutPageData, TIndexPageData } from '@/lib/schemas';
+import { GetStaticProps } from 'next';
+import { client } from 'sanity/server';
+import { indexPageQuery } from 'sanity/queries';
 
 const Container = (headerHeight: number) => css`
   width: 100vw;
@@ -280,12 +285,17 @@ const IndexArray = [
   },
 ];
 
-const Index = (): JSX.Element => {
+type TProps = TPageCommonProps & TIndexPageData;
+
+const Index = ({ curators }: TProps) => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   React.useEffect(() => {
     setHeaderColor('#fff');
   });
+
+  // Test
+  console.log(curators);
 
   return (
     <React.Fragment>
@@ -329,3 +339,16 @@ const Index = (): JSX.Element => {
 };
 
 export default Index;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { curators } = indexPageData.parse(await client.fetch(indexPageQuery));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      curators,
+    },
+  };
+};

@@ -14,6 +14,11 @@ import { headerState, headerColorState } from '../../../state/index';
 
 import arrowDownImage from 'public/images/arrowDown.png';
 import SampleImage1 from 'public/images/about_1.png';
+import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/lib/schemas';
+import { client } from 'sanity/server';
+import { curatorialPracticePageQuery } from 'sanity/queries';
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
 
 type TKeywordArray = string[];
 type TCategoryArray = string[];
@@ -305,7 +310,7 @@ const ModuleContainer = css`
     & > div:first-of-type {
       min-height: 230px;
       height: 30vh;
-      padding-right: 0;0
+      padding-right: 0;
     }
   }
 `;
@@ -460,7 +465,9 @@ const Module = () => {
   );
 };
 
-const CuratorialPractice = (): JSX.Element => {
+type TProps = TPageCommonProps & TCuratorialPracticePageData;
+
+const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
   const router = useRouter();
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
@@ -468,6 +475,10 @@ const CuratorialPractice = (): JSX.Element => {
   React.useEffect(() => {
     setHeaderColor('#fff');
   }, []);
+
+  // Test
+  console.log(tags, categories, projects);
+
   return (
     <React.Fragment>
       <style jsx global>{`
@@ -554,3 +565,20 @@ const CuratorialPractice = (): JSX.Element => {
 };
 
 export default CuratorialPractice;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { tags, categories, projects } = curatorialPracticePageData.parse(
+    await client.fetch(curatorialPracticePageQuery)
+  );
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      tags,
+      categories,
+      projects,
+    },
+  };
+};

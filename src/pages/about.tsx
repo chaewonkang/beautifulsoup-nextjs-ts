@@ -14,6 +14,11 @@ import { headerState, headerColorState } from '../../state/index';
 import AboutImage1 from '/public/images/about_1.png';
 import AboutImage2 from '/public/images/about_2.png';
 import AboutImage3 from '/public/images/about_3.png';
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { aboutPageData, TAboutPageData } from '@/lib/schemas';
+import { aboutPageQuery } from 'sanity/queries';
+import { client } from 'sanity/server';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -189,13 +194,18 @@ const AboutWrapper = (headerHeight: number) => css`
   }
 `;
 
-const About = (): JSX.Element => {
+type TProps = TPageCommonProps & TAboutPageData;
+
+const About = ({ aboutPageConfig }: TProps) => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
   React.useEffect(() => {
     setHeaderColor('#fff');
   });
+
+  // Test
+  console.log(aboutPageConfig);
 
   return (
     <React.Fragment>
@@ -392,3 +402,16 @@ const About = (): JSX.Element => {
 };
 
 export default About;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { aboutPageConfig } = aboutPageData.parse(await client.fetch(aboutPageQuery));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      aboutPageConfig,
+    },
+  };
+};

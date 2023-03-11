@@ -15,7 +15,17 @@ import { headerState, headerColorState } from '../../../../../state/index';
 import SampleImage1 from '/public/images/about_1.png';
 
 /* interface */
-import type { IArtistBannerProps, INoteProps } from '../../../../../interfaces/index';
+import type {
+  IArtistBannerProps,
+  INoteProps,
+  IParams,
+  IPreviewData,
+  TPageCommonProps,
+} from '../../../../../interfaces/index';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { client } from 'sanity/server';
+import { TWorkPageData, workPageData } from '@/lib/schemas';
+import { workPageQuery } from 'sanity/queries';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -461,7 +471,9 @@ const NoteData: TNoteBannerSampleData = [
   },
 ];
 
-const id = (): JSX.Element => {
+type TProps = TPageCommonProps & TWorkPageData;
+
+const id = ({ work }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   const router = useRouter();
@@ -470,6 +482,9 @@ const id = (): JSX.Element => {
   useEffect(() => {
     setHeaderColor('#D2FFFF');
   });
+
+  // Test
+  console.log(work);
 
   return (
     <React.Fragment>
@@ -624,3 +639,28 @@ const id = (): JSX.Element => {
 };
 
 export default id;
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const projectSlug = params?.curator;
+  const workSlug = params?.id;
+  if (!projectSlug || !workSlug) throw new Error('Param `curator` missing');
+
+  const { work } = workPageData.parse(await client.fetch(workPageQuery, { projectSlug, workSlug }));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      work,
+    },
+    notFound: !work,
+  };
+};

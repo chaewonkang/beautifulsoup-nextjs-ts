@@ -12,6 +12,11 @@ import { headerState, headerColorState } from '../../../state/index';
 
 /* images */
 import SampleImage1 from '/public/images/about_1.png';
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { newsPageData, TNewsPageData } from '@/lib/schemas';
+import { client } from 'sanity/server';
+import { newsPageQuery } from 'sanity/queries';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -242,13 +247,18 @@ const NewsModule = () => {
   );
 };
 
-const News = (): JSX.Element => {
+type TProps = TPageCommonProps & TNewsPageData;
+
+const News = ({ articles }: TProps) => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
   React.useEffect(() => {
     setHeaderColor('#fff');
   });
+
+  // Test
+  console.log(articles);
 
   return (
     <React.Fragment>
@@ -280,3 +290,16 @@ const News = (): JSX.Element => {
 };
 
 export default News;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { articles } = newsPageData.parse(await client.fetch(newsPageQuery));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      articles,
+    },
+  };
+};
