@@ -1,5 +1,5 @@
 import { routes } from '@/lib/constants';
-import { projectPageUrlData, workPageUrlData } from '@/lib/schemas';
+import { projectPageUrlData, workPageUrlData } from '@/schemas';
 import { editorClient, getDocument } from '@/sanity/editorClient';
 import { projectPageUrlQuery, workPageUrlQuery } from '@/sanity/queries';
 import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook';

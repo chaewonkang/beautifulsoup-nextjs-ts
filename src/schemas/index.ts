@@ -1,27 +1,51 @@
 import { z } from 'zod';
-import { sanityImageObject } from './sanityImageObject';
 import { schemaForType } from './utils';
 import { TypedObject } from '@sanity/types';
+import {
+  SanityAsset,
+  SanityImageCrop,
+  SanityImageHotspot,
+} from '@sanity/image-url/lib/types/types';
 
-const tag = z.object({
-  slug: z.string(),
-  title: z.string(),
-});
-
-const category = z.object({
-  slug: z.string(),
-  title: z.string(),
-});
-
-const imageWithAlt = z.object({
-  image: sanityImageObject,
-  alt: z.string().nullable(),
-});
-
-export const imageWithCaption = z.object({
-  image: sanityImageObject,
-  alt: z.string().nullable(),
-  caption: z.string().nullable(),
+// https://www.simeongriggs.dev/type-safe-groq-queries-for-sanity-data-with-zod
+// https://github.com/SimeonGriggs/simeonGriggs/blob/main/app/types/image.ts
+const sanityImageCrop = schemaForType<SanityImageCrop>()(
+  z.object({
+    _type: z.literal('sanity.imageCrop'),
+    left: z.number(),
+    bottom: z.number(),
+    right: z.number(),
+    top: z.number(),
+  })
+);
+const sanityImageHotspot = schemaForType<SanityImageHotspot>()(
+  z.object({
+    _type: z.literal('sanity.imageHotspot'),
+    width: z.number(),
+    height: z.number(),
+    x: z.number(),
+    y: z.number(),
+  })
+);
+const sanityAsset = schemaForType<SanityAsset>()(
+  z.object({
+    _id: z.string(),
+    metadata: z
+      .object({
+        lqip: z.string(),
+        isOpaque: z.boolean(),
+        dimensions: z.object({
+          width: z.number(),
+          height: z.number(),
+        }),
+      })
+      .nullable(),
+  })
+);
+const sanityImageObject = z.object({
+  asset: sanityAsset,
+  crop: sanityImageCrop.nullable(),
+  hotspot: sanityImageHotspot.nullable(),
 });
 
 export const typedObject = schemaForType<TypedObject>()(
@@ -32,6 +56,17 @@ export const typedObject = schemaForType<TypedObject>()(
     })
     .passthrough()
 );
+
+const imageWithAlt = z.object({
+  image: sanityImageObject,
+  alt: z.string().nullable(),
+});
+
+const imageWithCaption = z.object({
+  image: sanityImageObject,
+  alt: z.string().nullable(),
+  caption: z.string().nullable(),
+});
 
 const contentSection = z.object({
   images: z.array(imageWithCaption).nullable(),
@@ -47,6 +82,16 @@ const file = z.object({
 const attachment = z.object({
   title: z.string(),
   file,
+});
+
+const tag = z.object({
+  slug: z.string(),
+  title: z.string(),
+});
+
+const category = z.object({
+  slug: z.string(),
+  title: z.string(),
 });
 
 const curator = z.object({

@@ -13,9 +13,6 @@ export const redirectAsPreview = (
   res.end();
 };
 
-// type T = SanityImageObject['crop']
-// type s = SanityAsset['']
-
 // Typeguards
 interface IPreviewGetReq extends NextApiRequest {
   query: {
