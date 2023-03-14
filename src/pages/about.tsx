@@ -16,9 +16,11 @@ import AboutImage2 from '/public/images/about_2.png';
 import AboutImage3 from '/public/images/about_3.png';
 import { GetStaticProps } from 'next';
 import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
-import { aboutPageData, TAboutPageData } from '@/lib/schemas';
-import { aboutPageQuery } from 'sanity/queries';
-import { client } from 'sanity/server';
+import { publicClient } from '@/sanity/publicClient';
+import { aboutPageQuery } from '@/sanity/queries';
+import contentSectionTextBlockComponents from 'components/portableText/contentSectionTextBlockComponents';
+import { aboutPageData, TAboutPageData } from '@/schemas';
+import ContentSection from 'components/ContentSection';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -222,6 +224,13 @@ const About = ({ aboutPageConfig }: TProps) => {
             </div>
           </div>
           <div css={AboutWrapper(headerHeight)}>
+            {aboutPageConfig.content?.map((contentSection, idx) => (
+              <ContentSection
+                key={idx}
+                contentSection={contentSection}
+                components={contentSectionTextBlockComponents}
+              />
+            ))}
             <div>
               <div>
                 <Image src={AboutImage1} alt="about_1" layout="intrinsic" />
@@ -406,7 +415,7 @@ export default About;
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
   const { previewData, params } = ctx;
 
-  const { aboutPageConfig } = aboutPageData.parse(await client.fetch(aboutPageQuery));
+  const { aboutPageConfig } = aboutPageData.parse(await publicClient.fetch(aboutPageQuery));
 
   return {
     props: {

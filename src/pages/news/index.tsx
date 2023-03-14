@@ -14,9 +14,9 @@ import { headerState, headerColorState } from '../../../state/index';
 import SampleImage1 from '/public/images/about_1.png';
 import { GetStaticProps } from 'next';
 import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
-import { newsPageData, TNewsPageData } from '@/lib/schemas';
-import { client } from 'sanity/server';
-import { newsPageQuery } from 'sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { newsPageQuery } from '@/sanity/queries';
+import { newsPageData, TNewsPageData } from '@/schemas';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -294,7 +294,7 @@ export default News;
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
   const { previewData, params } = ctx;
 
-  const { articles } = newsPageData.parse(await client.fetch(newsPageQuery));
+  const { articles } = newsPageData.parse(await publicClient.fetch(newsPageQuery));
 
   return {
     props: {

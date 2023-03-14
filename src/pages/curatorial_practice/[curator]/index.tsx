@@ -23,10 +23,10 @@ import type {
   IPreviewData,
   TPageCommonProps,
 } from '../../../../interfaces/index';
-import { projectPageData, TProjectPageData } from '@/lib/schemas';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { projectPageQuery } from 'sanity/queries';
-import { client } from 'sanity/server';
+import { projectPageQuery } from '@/sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { projectPageData, TProjectPageData } from '@/schemas';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -907,15 +907,21 @@ export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = asy
   const { previewData, params } = ctx;
 
   const projectSlug = params?.curator;
-  if (!projectSlug) throw new Error('Param `curator` missing');
+  if (!projectSlug) throw new Error('Param missing');
 
-  const { project } = projectPageData.parse(await client.fetch(projectPageQuery, { projectSlug }));
-
-  return {
-    props: {
-      previewToken: previewData ? previewData.previewToken : null,
-      project,
-    },
-    notFound: !project,
-  };
+  // Only published data is fetched inside getStaticProps,
+  // Seems safe to assume error is thrown only if project = null
+  try {
+    const { project } = projectPageData.parse(
+      await publicClient.fetch(projectPageQuery, { projectSlug })
+    );
+    return {
+      props: {
+        previewToken: previewData ? previewData.previewToken : null,
+        project,
+      },
+    };
+  } catch (err) {
+    return { notFound: true };
+  }
 };

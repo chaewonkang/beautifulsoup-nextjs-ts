@@ -10,9 +10,9 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../state/index';
 import { GetStaticProps } from 'next';
 import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
-import { client } from 'sanity/server';
-import { landingPageData, TLandingPageData } from '@/lib/schemas';
-import { landingPageQuery } from 'sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { landingPageQuery } from '@/sanity/queries';
+import { landingPageData, TLandingPageData } from '@/schemas';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -61,7 +61,7 @@ export default Index;
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
   const { previewData, params } = ctx;
 
-  const { landingPageConfig } = landingPageData.parse(await client.fetch(landingPageQuery));
+  const { landingPageConfig } = landingPageData.parse(await publicClient.fetch(landingPageQuery));
 
   return {
     props: {

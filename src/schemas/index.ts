@@ -1,21 +1,7 @@
-import { TypedObject } from '@sanity/types';
 import { z } from 'zod';
-
-// This function takes in a type, and returns a type to Zod
-const schemaForType =
-  <T>() =>
-  <S extends z.ZodType<T, any, any>>(arg: S) => {
-    return arg;
-  };
-
-const typedObject = schemaForType<TypedObject>()(
-  z
-    .object({
-      _type: z.string(),
-      _key: z.string(),
-    })
-    .passthrough()
-);
+import { sanityImageObject } from './sanityImageObject';
+import { schemaForType } from './utils';
+import { TypedObject } from '@sanity/types';
 
 const tag = z.object({
   slug: z.string(),
@@ -27,10 +13,29 @@ const category = z.object({
   title: z.string(),
 });
 
-const image = z.object({
-  url: z.string(),
-  width: z.number(),
-  height: z.number(),
+const imageWithAlt = z.object({
+  image: sanityImageObject,
+  alt: z.string().nullable(),
+});
+
+export const imageWithCaption = z.object({
+  image: sanityImageObject,
+  alt: z.string().nullable(),
+  caption: z.string().nullable(),
+});
+
+export const typedObject = schemaForType<TypedObject>()(
+  z
+    .object({
+      _type: z.string(),
+      _key: z.string(),
+    })
+    .passthrough()
+);
+
+const contentSection = z.object({
+  images: z.array(imageWithCaption).nullable(),
+  text: z.array(typedObject),
 });
 
 const file = z.object({
@@ -57,7 +62,7 @@ const curatorWithIntro = curator.extend({
 });
 
 const workCommon = z.object({
-  _key: z.string(),
+  _id: z.string(),
   slug: z.string(),
   title: z.string(),
   artistName: z.string(),
@@ -67,13 +72,21 @@ const workCommon = z.object({
 const workPreview = workCommon.extend({});
 
 const workDetail = workCommon.extend({
-  content: z.array(typedObject).nullable(),
+  content: z
+    .array(
+      z.discriminatedUnion('_type', [
+        z.object({ _type: z.literal('workContentSection') }).merge(contentSection),
+        z.object({ _type: z.literal('workContentIframe'), url: z.string() }),
+        z.object({ _type: z.literal('workContentSlot'), id: z.string() }),
+      ])
+    )
+    .nullable(),
   note: z.array(typedObject).nullable(),
   bio: z.array(typedObject).nullable(),
   attachments: z.array(attachment).nullable(),
   curator,
   projectSlug: z.string(),
-  works: z.array(workPreview).nullable(),
+  otherWorks: z.array(workPreview).nullable(),
 });
 
 const projectCommon = z.object({
@@ -87,14 +100,14 @@ const projectCommon = z.object({
 });
 
 const projectPreview = projectCommon.extend({
-  thumbnail: image,
+  thumbnail: imageWithAlt,
   curator,
   contentExcerpt: z.string().nullable(),
 });
 
 const projectDetail = projectCommon.extend({
   curator,
-  content: z.array(typedObject).nullable(),
+  content: z.array(contentSection).nullable(),
   note: z.array(typedObject).nullable(),
   bio: z.array(typedObject).nullable(),
   attachments: z.array(attachment).nullable(),
@@ -105,7 +118,7 @@ const programPreview = z.object({
   _id: z.string(),
   postedAt: z.string(),
   slug: z.string(),
-  thumbnail: image,
+  thumbnail: imageWithAlt,
   title: z.string(),
   intro: z.array(typedObject).nullable(),
   contentExcerpt: z.string().nullable(),
@@ -115,7 +128,7 @@ const articlePreview = z.object({
   _id: z.string(),
   postedAt: z.string(),
   slug: z.string(),
-  thumbnail: image,
+  thumbnail: imageWithAlt,
   title: z.string(),
   contentExcerpt: z.string().nullable(),
 });
@@ -141,7 +154,7 @@ export const newsPageData = z.object({
 
 export const aboutPageData = z.object({
   aboutPageConfig: z.object({
-    content: z.array(typedObject).nullable(),
+    content: z.array(contentSection).nullable(),
   }),
 });
 
@@ -151,13 +164,23 @@ export const indexPageData = z.object({
 });
 
 export const projectPageData = z.object({
-  project: projectDetail.nullable(),
+  project: projectDetail,
 });
 
 export const workPageData = z.object({
-  work: workDetail.nullable(),
+  work: workDetail,
 });
 
+export const workPageUrlData = z.object({
+  projectSlug: z.string(),
+  workSlug: z.string(),
+});
+
+export const projectPageUrlData = z.object({
+  projectSlug: z.string(),
+});
+
+// export type TImage = z.infer<typeof imageWithAlt>;
 export type TLandingPageData = z.infer<typeof landingPageData>;
 export type TCuratorialPracticePageData = z.infer<typeof curatorialPracticePageData>;
 export type TNewsPageData = z.infer<typeof newsPageData>;
@@ -165,3 +188,4 @@ export type TAboutPageData = z.infer<typeof aboutPageData>;
 export type TIndexPageData = z.infer<typeof indexPageData>;
 export type TProjectPageData = z.infer<typeof projectPageData>;
 export type TWorkPageData = z.infer<typeof workPageData>;
+export type TContentSection = z.infer<typeof contentSection>;

@@ -1,9 +1,43 @@
 import { groq } from 'next-sanity';
 
-const imageAssetFields = groq`
-url,
-'width': metadata.dimensions.width,
-'height': metadata.dimensions.height,
+const imageFields = groq`
+crop,
+hotspot,
+asset -> {
+  _id,
+  metadata {
+    lqip,
+    isOpaque,
+    dimensions {
+      width,
+      height,
+    },
+  },
+},
+`;
+
+const imageWithAltFields = groq`
+image {
+  ${imageFields}
+},
+alt,
+`;
+
+const imageWithCaptionFields = groq`
+image {
+  ${imageFields}
+},
+alt,
+caption,
+`;
+
+const contentSectionFields = groq`
+text[] {
+  ...,
+},
+images[] {
+  ${imageWithCaptionFields}
+},
 `;
 
 const fileAssetFields = groq`
@@ -34,12 +68,11 @@ intro,
 
 // Common fields shared by preview & detail
 const workCommonFields = groq`
-_key,
+_id,
 'slug': slug.current,
 title,
 artistName,
 'color': color.hex,
-
 `;
 
 const workPreviewFields = groq`
@@ -68,8 +101,8 @@ categories[] -> {
 
 const projectPreviewFields = groq`
 ${projectCommonFields}
-'thumbnail': thumbnail.asset -> {
-  ${imageAssetFields}
+thumbnail {
+  ${imageWithAltFields}
 },
 'contentExcerpt': array::join(string::split(array::join(content[]{'text': pt::text(text)}.text, " "), "")[0...300], ""),
 `;
@@ -78,8 +111,8 @@ const programPreviewFields = groq`
 _id,
 postedAt,
 'slug': slug.current,
-'thumbnail': thumbnail.asset -> {
-  ${imageAssetFields}
+thumbnail {
+  ${imageWithAltFields}
 },
 title,
 intro,
@@ -90,8 +123,8 @@ const articlesPreviewFields = groq`
 _id,
 postedAt,
 'slug': slug.current,
-'thumbnail': thumbnail.asset -> {
-  ${imageAssetFields}
+thumbnail {
+  ${imageWithAltFields}
 },
 title,
 'contentExcerpt': array::join(string::split(array::join(content[]{'text': pt::text(text)}.text, " "), "")[0...300], ""),
@@ -138,7 +171,9 @@ const articlesQuery = groq`
 
 const aboutPageConfigQuery = groq`
 *[_id == 'aboutPageConfig'][0] {
-  content,
+  content[] {
+    ${contentSectionFields}
+  },
 }
 `;
 
@@ -151,38 +186,49 @@ const curatorsQuery = groq`
 const projectQuery = groq`
 *[_type == 'project' && slug.current == $projectSlug][0] {
   ${projectCommonFields}
-  content,
+  content[] {
+    ${contentSectionFields}
+  },
   note,
   bio,
   attachments[] {
     ${attachmentFields}
   },
-  works[] {
+  works[] -> {
     ${workPreviewFields}
   },
 }
 `;
 
 const workQuery = groq`
-*[_type == 'project' && slug.current == $projectSlug][0]
-.works[_type == 'work' && slug.current == $workSlug][0] {
+*[_type == 'work' && references(*[_type == 'project' && slug.current == $projectSlug]._id) && slug.current == $workSlug][0] {
   ${workCommonFields}
-  content,
+  content[] {
+    _type,
+    _type == 'workContentSection' => {
+      ${contentSectionFields}
+    },
+    _type == 'workContentIframe' => {
+      url,
+    },
+    _type == 'workContentSlot' => {
+      id,
+    },
+  },
   note,
   bio,
   attachments[] {
     ${attachmentFields}
   },
-  // Ignore syntax highlighting error
-  ...(*[_type == 'project' && slug.current == $projectSlug][0]{
+  ...(project -> {
     curator -> {
       ${curatorFields}
     },
     'projectSlug': slug.current,
-    works[] {
+    'otherWorks': *[_type == 'work' && references(*[_type == 'project' && slug.current == $projectSlug]._id) && slug.current != $workSlug] {
       ${workPreviewFields}
     },
-  })
+  }),
 }
 `;
 
@@ -227,5 +273,22 @@ export const projectPageQuery = groq`
 export const workPageQuery = groq`
 {
   'work': ${workQuery},
+}
+`;
+
+export const workPageUrlQuery = groq`
+{
+  ...(*[_id == $workId][0] {
+    'projectSlug': project->slug.current,
+    'workSlug': slug.current,
+  })
+}
+`;
+
+export const projectPageUrlQuery = groq`
+{
+  ...(*[_id == $projectId][0] {
+    'projectSlug': slug.current,
+  })
 }
 `;

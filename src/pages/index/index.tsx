@@ -9,10 +9,10 @@ import { PageLayout } from '../../../components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
 import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
-import { indexPageData, TAboutPageData, TIndexPageData } from '@/lib/schemas';
 import { GetStaticProps } from 'next';
-import { client } from 'sanity/server';
-import { indexPageQuery } from 'sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { indexPageQuery } from '@/sanity/queries';
+import { indexPageData, TIndexPageData } from '@/schemas';
 
 const Container = (headerHeight: number) => css`
   width: 100vw;
@@ -343,7 +343,7 @@ export default Index;
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
   const { previewData, params } = ctx;
 
-  const { curators } = indexPageData.parse(await client.fetch(indexPageQuery));
+  const { curators } = indexPageData.parse(await publicClient.fetch(indexPageQuery));
 
   return {
     props: {

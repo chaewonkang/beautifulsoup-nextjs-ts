@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ComponentProps, useEffect, useMemo } from 'react';
 import '@/styles/globals.css';
 import '@/styles/fonts.css';
 import '@/styles/base.css';
@@ -10,11 +10,34 @@ import Head from 'next/head';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
+import { TPageCommonProps } from 'interfaces';
+import { PreviewSuspense } from 'next-sanity/preview';
+import Preview from '@/sanity/Preview';
+import { routes } from '@/lib/constants';
+import {
+  aboutPageQuery,
+  curatorialPracticePageQuery,
+  indexPageQuery,
+  landingPageQuery,
+  projectPageQuery,
+  workPageQuery,
+} from '@/sanity/queries';
+import {
+  aboutPageData,
+  curatorialPracticePageData,
+  indexPageData,
+  landingPageData,
+  projectPageData,
+  workPageData,
+} from '@/schemas';
 
 const queryClient = new QueryClient();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps<TPageCommonProps>) {
   const router = useRouter();
+
+  const { pathname, query } = router;
+  const { previewToken } = pageProps;
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -52,10 +75,40 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="shortcut icon" href="/images/favicon.png" />
       </Head>
+
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <RecoilRoot>
-          <Component {...pageProps} />
+          {previewToken ? (
+            <Preview
+              previewToken={previewToken}
+              {...(pathname === routes.landing
+                ? { query: landingPageQuery, schema: landingPageData }
+                : pathname === routes.about
+                ? { query: aboutPageQuery, schema: aboutPageData }
+                : pathname === routes.curatorialPractice
+                ? { query: curatorialPracticePageQuery, schema: curatorialPracticePageData }
+                : pathname === routes.project.pathname
+                ? {
+                    query: projectPageQuery,
+                    params: { projectSlug: query.curator },
+                    schema: projectPageData,
+                  }
+                : pathname === routes.work.pathname
+                ? {
+                    query: workPageQuery,
+                    params: { projectSlug: query.curator, workSlug: query.id },
+                    schema: workPageData,
+                  }
+                : pathname === routes.index
+                ? { query: indexPageQuery, schema: indexPageData }
+                : {})}
+            >
+              {(pagePreviewProps) => <Component {...pageProps} {...pagePreviewProps} />}
+            </Preview>
+          ) : (
+            <Component {...pageProps} />
+          )}
         </RecoilRoot>
       </QueryClientProvider>
     </>

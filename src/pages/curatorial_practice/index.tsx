@@ -14,11 +14,11 @@ import { headerState, headerColorState } from '../../../state/index';
 
 import arrowDownImage from 'public/images/arrowDown.png';
 import SampleImage1 from 'public/images/about_1.png';
-import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/lib/schemas';
-import { client } from 'sanity/server';
-import { curatorialPracticePageQuery } from 'sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { curatorialPracticePageQuery } from '@/sanity/queries';
 import { GetStaticProps } from 'next';
 import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/schemas';
 
 type TKeywordArray = string[];
 type TCategoryArray = string[];
@@ -569,8 +569,10 @@ export default CuratorialPractice;
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
   const { previewData, params } = ctx;
 
+  const test = await publicClient.fetch(curatorialPracticePageQuery);
+
   const { tags, categories, projects } = curatorialPracticePageData.parse(
-    await client.fetch(curatorialPracticePageQuery)
+    await publicClient.fetch(curatorialPracticePageQuery)
   );
 
   return {

@@ -23,9 +23,11 @@ import type {
   TPageCommonProps,
 } from '../../../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { client } from 'sanity/server';
-import { TWorkPageData, workPageData } from '@/lib/schemas';
-import { workPageQuery } from 'sanity/queries';
+import { workPageQuery } from '@/sanity/queries';
+import { publicClient } from '@/sanity/publicClient';
+import { TWorkPageData, workPageData } from '@/schemas';
+import ContentSection from 'components/ContentSection';
+import workContentSectionTextBlockComponents from 'components/portableText/workContentSectionTextBlockComponents';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -526,6 +528,33 @@ const id = ({ work }: TProps): JSX.Element => {
               </div>
             </div>
             <div css={ContentWrapper}>
+              {work.content?.map((item, idx) => {
+                if (item._type === 'workContentSection') {
+                  return (
+                    <ContentSection
+                      key={idx}
+                      contentSection={item}
+                      components={workContentSectionTextBlockComponents}
+                    />
+                  );
+                }
+                if (item._type === 'workContentIframe') {
+                  // Test
+                  console.log(item.url);
+                  return (
+                    // Iframe component
+                    null
+                  );
+                }
+                if (item._type === 'workContentSlot') {
+                  // Test
+                  console.log(item.id);
+                  return (
+                    // Slot
+                    null
+                  );
+                }
+              })}
               <div>
                 <div>
                   <Image src={SampleImage1} alt="sample_image" layout="intrinsic" />
@@ -652,15 +681,22 @@ export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = asy
 
   const projectSlug = params?.curator;
   const workSlug = params?.id;
-  if (!projectSlug || !workSlug) throw new Error('Param `curator` missing');
+  if (!projectSlug || !workSlug) throw new Error('Param missing');
 
-  const { work } = workPageData.parse(await client.fetch(workPageQuery, { projectSlug, workSlug }));
-
-  return {
-    props: {
-      previewToken: previewData ? previewData.previewToken : null,
-      work,
-    },
-    notFound: !work,
-  };
+  // Only published data is fetched inside getStaticProps,
+  // Seems safe to assume error is thrown only if work = null
+  try {
+    const { work } = workPageData.parse(
+      await publicClient.fetch(workPageQuery, { projectSlug, workSlug })
+    );
+    return {
+      props: {
+        previewToken: previewData ? previewData.previewToken : null,
+        work,
+      },
+      notFound: !work,
+    };
+  } catch (err) {
+    return { notFound: true };
+  }
 };
