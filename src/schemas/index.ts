@@ -169,13 +169,21 @@ const programPreview = z.object({
   contentExcerpt: z.string().nullable(),
 });
 
-const articlePreview = z.object({
+const articleCommon = z.object({
   _id: z.string(),
   postedAt: z.string(),
   slug: z.string(),
-  thumbnail: imageWithAlt,
   title: z.string(),
+});
+
+const articlePreview = articleCommon.extend({
+  thumbnail: imageWithAlt,
   contentExcerpt: z.string().nullable(),
+});
+
+const articleDetail = articleCommon.extend({
+  content: z.array(contentSection).nullable(),
+  attachments: z.array(attachment).nullable(),
 });
 
 export const landingPageData = z.object({
@@ -211,9 +219,22 @@ export const indexPageData = z.object({
 export const projectPageData = z.object({
   project: projectDetail,
 });
+export const projectPageDataNullable = z.object({
+  project: projectDetail.nullable(),
+});
 
 export const workPageData = z.object({
   work: workDetail,
+});
+export const workPageDataNullable = z.object({
+  work: workDetail.nullable(),
+});
+
+export const articlePageData = z.object({
+  article: articleDetail,
+});
+export const articlePageDataNullable = z.object({
+  article: articleDetail.nullable(),
 });
 
 export const workPageUrlData = z.object({
@@ -225,12 +246,16 @@ export const projectPageUrlData = z.object({
   projectSlug: z.string(),
 });
 
-// export type TImage = z.infer<typeof imageWithAlt>;
+export const articlePageUrlData = z.object({
+  articleSlug: z.string(),
+});
+
 export type TLandingPageData = z.infer<typeof landingPageData>;
 export type TCuratorialPracticePageData = z.infer<typeof curatorialPracticePageData>;
 export type TNewsPageData = z.infer<typeof newsPageData>;
 export type TAboutPageData = z.infer<typeof aboutPageData>;
 export type TIndexPageData = z.infer<typeof indexPageData>;
 export type TProjectPageData = z.infer<typeof projectPageData>;
+export type TArticlePageData = z.infer<typeof articlePageData>;
 export type TWorkPageData = z.infer<typeof workPageData>;
 export type TContentSection = z.infer<typeof contentSection>;

@@ -2,7 +2,7 @@ import { typedObject } from '@/schemas';
 import { PortableTextProps } from '@portabletext/react';
 import { z } from 'zod';
 import { Paragraph } from './blocks';
-import { SuperscriptMark, LinkMark } from './marks';
+import { SuperscriptMark, LinkMark, StyleMark } from './marks';
 
 interface IVideoEmbedProps {
   videoUrl: string;
@@ -32,6 +32,7 @@ const workContentSectionTextComponent = z.discriminatedUnion('type', [
 const workContentSectionTextBlockComponents: PortableTextProps['components'] = {
   marks: {
     externalLinkAnnotation: LinkMark,
+    styleAnnotation: StyleMark,
     sup: SuperscriptMark,
   },
   block: {

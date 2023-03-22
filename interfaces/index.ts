@@ -22,3 +22,8 @@ export interface IPreviewData {
 export type TPageCommonProps = {
   previewToken: string | null;
 };
+
+// Prevent props type error
+export type TRedirectProps = {
+  redirect: true;
+};

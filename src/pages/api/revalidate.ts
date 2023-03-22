@@ -4,9 +4,7 @@ import { editorClient, getDocument } from '@/sanity/editorClient';
 import { projectPageUrlQuery, workPageUrlQuery } from '@/sanity/queries';
 import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-const apiSecret = process.env.API_SECRET;
-if (!apiSecret) throw new Error('Env var missing: `API_SECRET`');
+import { apiSecret } from '@/lib/serverEnvs';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') return res.status(401).send('Bad request');

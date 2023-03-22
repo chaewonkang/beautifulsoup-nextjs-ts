@@ -20,6 +20,7 @@ import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
 import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/schemas';
 import { PortableText } from '@portabletext/react';
 import introBlockComponents from 'components/portableText/introBlockComponents';
+import { sanityEditorToken } from '@/lib/serverEnvs';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -622,17 +623,13 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
 export default CuratorialPractice;
 
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
-
-  const test = await publicClient.fetch(curatorialPracticePageQuery);
-
+  const { preview } = ctx;
   const { tags, categories, projects } = curatorialPracticePageData.parse(
     await publicClient.fetch(curatorialPracticePageQuery)
   );
-
   return {
     props: {
-      previewToken: previewData ? previewData.previewToken : null,
+      previewToken: preview ? sanityEditorToken : null,
       tags,
       categories,
       projects,

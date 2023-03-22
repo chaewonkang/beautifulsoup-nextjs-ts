@@ -1,8 +1,13 @@
+import { groq } from 'next-sanity';
 import { definePreview, Params, PreviewSuspense } from 'next-sanity/preview';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { z } from 'zod';
 import { dataset, projectId } from './config';
+
+const neverQuery = groq`*[_id == 'never'][0] {}`;
 
 let alerted = false;
 export const usePreview = definePreview({
@@ -21,17 +26,17 @@ export const usePreview = definePreview({
 });
 
 interface IProps {
-  previewToken: string;
-  children: (data: any) => JSX.Element;
+  previewToken?: string | null;
   query?: string;
   params?: Params;
   schema?: z.Schema;
+  children: (data: any) => JSX.Element;
 }
 
-const Preview = ({ children, previewToken, query, params, schema }: IProps) => {
-  return query ? (
+const WithPreview = ({ previewToken, query, params, schema, children }: IProps) => {
+  return previewToken ? (
     <PreviewSuspense fallback="Loading...">
-      <ErrorBoundary FallbackComponent={ErrorScreen}>
+      <ErrorBoundary FallbackComponent={Redirect}>
         <PreviewInner previewToken={previewToken} query={query} params={params} schema={schema}>
           {children}
         </PreviewInner>
@@ -39,31 +44,28 @@ const Preview = ({ children, previewToken, query, params, schema }: IProps) => {
       <ExitPreviewButton />
     </PreviewSuspense>
   ) : (
-    <div>No matching query for this preview.</div>
+    children({})
   );
 };
+export default WithPreview;
 
 interface IPreviewInnerProps {
   previewToken: string;
-  children: (data: any) => JSX.Element;
-  query: string;
+  query?: string;
   params?: Params;
   schema?: z.Schema;
+  children: (data: any) => JSX.Element;
 }
 
-const PreviewInner = ({ previewToken, children, query, params, schema }: IPreviewInnerProps) => {
-  const pagePreviewProps = usePreview(previewToken, query, params);
+const PreviewInner = ({ previewToken, query, params, schema, children }: IPreviewInnerProps) => {
+  const pagePreviewProps = usePreview(previewToken, query ?? neverQuery, params);
   if (schema) schema.parse(pagePreviewProps);
   return children(pagePreviewProps);
 };
-export default Preview;
 
 const ExitPreviewButton = () => {
   return (
     <Link
-      // className="fixed bottom-2 right-2 px-3 py-1 z-50 rounded-sm bg-neutral-200 border border-neutral-500"
-      type="button"
-      href="/api/exit-preview"
       style={{
         position: 'fixed',
         bottom: '8px',
@@ -73,13 +75,24 @@ const ExitPreviewButton = () => {
         border: '1px solid #000',
         cursor: 'pointer',
       }}
+      type="button"
+      href="/api/exit-preview"
     >
       Exit Preview
     </Link>
   );
 };
 
-const ErrorScreen = () => {
+const Redirect = () => {
+  const router = useRouter();
+  useEffect(() => {
+    console.log('ERROR!!');
+    router.replace('/preview-error');
+  }, [router]);
+  return null;
+};
+
+export const PreviewErrorScreen = () => {
   return (
     <div
       style={{

@@ -1,10 +1,11 @@
 import { PortableTextProps } from '@portabletext/react';
 import { Paragraph } from './blocks';
-import { SuperscriptMark, LinkMark } from './marks';
+import { SuperscriptMark, LinkMark, StyleMark } from './marks';
 
 const contentSectionTextBlockComponents: PortableTextProps['components'] = {
   marks: {
     externalLinkAnnotation: LinkMark,
+    styleAnnotation: StyleMark,
     sup: SuperscriptMark,
   },
   block: {

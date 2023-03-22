@@ -17,6 +17,7 @@ import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
 import { publicClient } from '@/sanity/publicClient';
 import { newsPageQuery } from '@/sanity/queries';
 import { newsPageData, TNewsPageData } from '@/schemas';
+import { sanityEditorToken } from '@/lib/serverEnvs';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -337,13 +338,13 @@ const News = ({ articles }: TProps) => {
 export default News;
 
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
+  const { preview } = ctx;
 
   const { articles } = newsPageData.parse(await publicClient.fetch(newsPageQuery));
 
   return {
     props: {
-      previewToken: previewData ? previewData.previewToken : null,
+      previewToken: preview ? sanityEditorToken : null,
       articles,
     },
   };

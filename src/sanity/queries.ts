@@ -119,15 +119,29 @@ intro,
 'contentExcerpt': array::join(string::split(array::join(content[]{'text': pt::text(text)}.text, " "), "")[0...300], ""),
 `;
 
-const articlesPreviewFields = groq`
+const articleCommonFields = groq`
 _id,
 postedAt,
 'slug': slug.current,
+title,
+`;
+
+const articlesPreviewFields = groq`
+${articleCommonFields}
 thumbnail {
   ${imageWithAltFields}
 },
-title,
 'contentExcerpt': array::join(string::split(array::join(content[]{'text': pt::text(text)}.text, " "), "")[0...300], ""),
+`;
+
+const articlesDetailFields = groq`
+${articleCommonFields}
+content[] {
+  ${contentSectionFields}
+},
+attachments[] {
+  ${attachmentFields}
+},
 `;
 
 const landingPageConfigQuery = groq`
@@ -232,6 +246,18 @@ const workQuery = groq`
 }
 `;
 
+const articleQuery = groq`
+*[_type == 'article' && slug.current == $articleSlug][0] {
+  ${articleCommonFields}
+  content[] {
+    ${contentSectionFields}
+  },
+  attachments[] {
+    ${attachmentFields}
+  },
+}
+`;
+
 export const landingPageQuery = groq`
 {
   'landingPageConfig': ${landingPageConfigQuery},
@@ -276,9 +302,18 @@ export const workPageQuery = groq`
 }
 `;
 
+export const articlePageQuery = groq`
+{
+  'article': ${articleQuery},
+}
+`;
+
 export const workPageUrlQuery = groq`
 {
-  ...(*[_id == $workId][0] {
+  ...(coalesce(
+    *[_id == 'drafts.' + $workId][0],
+    *[_id == $workId][0],
+  ) {
     'projectSlug': project->slug.current,
     'workSlug': slug.current,
   })
@@ -287,8 +322,22 @@ export const workPageUrlQuery = groq`
 
 export const projectPageUrlQuery = groq`
 {
-  ...(*[_id == $projectId][0] {
+  ...(coalesce(
+    *[_id == 'drafts.' + $projectId][0],
+    *[_id == $projectId][0],
+  ) {
     'projectSlug': slug.current,
+  })
+}
+`;
+
+export const articlePageUrlQuery = groq`
+{
+  ...(coalesce(
+    *[_id == 'drafts.' + $articleId][0],
+    *[_id == $articleId][0],
+  ) {
+    'articleSlug': slug.current,
   })
 }
 `;

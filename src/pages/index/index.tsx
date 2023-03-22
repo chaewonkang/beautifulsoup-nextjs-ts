@@ -15,6 +15,7 @@ import { indexPageQuery } from '@/sanity/queries';
 import { indexPageData, TIndexPageData } from '@/schemas';
 import { PortableText } from '@portabletext/react';
 import introBlockComponents from 'components/portableText/introBlockComponents';
+import { sanityEditorToken } from '@/lib/serverEnvs';
 
 const Container = (headerHeight: number) => css`
   width: 100vw;
@@ -319,13 +320,11 @@ const Index = ({ curators }: TProps): JSX.Element => {
 export default Index;
 
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
-
+  const { preview } = ctx;
   const { curators } = indexPageData.parse(await publicClient.fetch(indexPageQuery));
-
   return {
     props: {
-      previewToken: previewData ? previewData.previewToken : null,
+      previewToken: preview ? sanityEditorToken : null,
       curators,
     },
   };

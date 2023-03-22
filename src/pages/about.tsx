@@ -17,6 +17,7 @@ import { aboutPageQuery } from '@/sanity/queries';
 import contentSectionTextBlockComponents from 'components/portableText/contentSectionTextBlockComponents';
 import { aboutPageData, TAboutPageData } from '@/schemas';
 import ContentSection from 'components/ContentSection';
+import { sanityEditorToken } from '@/lib/serverEnvs';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -237,13 +238,13 @@ const About = ({ aboutPageConfig }: TProps) => {
 export default About;
 
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
+  const { preview } = ctx;
 
   const { aboutPageConfig } = aboutPageData.parse(await publicClient.fetch(aboutPageQuery));
 
   return {
     props: {
-      previewToken: previewData ? previewData.previewToken : null,
+      previewToken: preview ? sanityEditorToken : null,
       aboutPageConfig,
     },
   };

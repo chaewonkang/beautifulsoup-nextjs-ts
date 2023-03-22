@@ -13,6 +13,7 @@ import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
 import { publicClient } from '@/sanity/publicClient';
 import { landingPageQuery } from '@/sanity/queries';
 import { landingPageData, TLandingPageData } from '@/schemas';
+import { sanityEditorToken } from '@/lib/serverEnvs';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -65,13 +66,11 @@ const Index = ({ landingPageConfig }: TProps) => {
 export default Index;
 
 export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
-
+  const { preview } = ctx;
   const { landingPageConfig } = landingPageData.parse(await publicClient.fetch(landingPageQuery));
-
   return {
     props: {
-      previewToken: previewData ? previewData.previewToken : null,
+      previewToken: preview ? sanityEditorToken : null,
       landingPageConfig,
     },
   };

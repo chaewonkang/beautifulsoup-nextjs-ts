@@ -16,11 +16,13 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
 
 /* interfaces */
-import type { IParams, IPreviewData, TPageCommonProps } from '../../../interfaces/index';
+import type { IParams, TPageCommonProps, TRedirectProps } from '../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { projectPageQuery } from '@/sanity/queries';
+import { articlePageQuery, projectPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
-import { projectPageData, TProjectPageData } from '@/schemas';
+import { articlePageDataNullable, TArticlePageData } from '@/schemas';
+import { sanityEditorToken } from '@/lib/serverEnvs';
+import { routes } from '@/lib/constants';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -408,9 +410,9 @@ const BioContainer = css`
   }
 `;
 
-type TProps = TPageCommonProps & TProjectPageData;
+type TProps = TPageCommonProps & TArticlePageData;
 
-const id = ({ project }: TProps): JSX.Element => {
+const id = ({ article }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
   const router = useRouter();
@@ -421,7 +423,7 @@ const id = ({ project }: TProps): JSX.Element => {
   });
 
   // Test
-  console.log(project);
+  console.log(article);
 
   return (
     <React.Fragment>
@@ -485,3 +487,39 @@ const id = ({ project }: TProps): JSX.Element => {
 };
 
 export default id;
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = async (ctx) => {
+  const { preview, params } = ctx;
+
+  const articleSlug = params?.id;
+  if (!articleSlug) throw new Error('never');
+
+  try {
+    const { article } = articlePageDataNullable.parse(
+      await publicClient.fetch(
+        articlePageQuery,
+        { articleSlug },
+        { token: preview ? sanityEditorToken : undefined }
+      )
+    );
+    if (!article) return { notFound: true };
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        article,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: { destination: routes.previewError },
+      props: { redirect: true }, // Prevent props type error
+    };
+  }
+};

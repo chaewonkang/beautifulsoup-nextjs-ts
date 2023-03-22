@@ -11,5 +11,11 @@ export const routes = {
     path: (projectSlug: string, workSlug: string) =>
       `/curatorial_practice/${projectSlug}/${workSlug}`,
   },
+  news: '/news',
+  article: {
+    pathname: '/news/[id]',
+    path: (articleSlug: string) => `/news/${articleSlug}`,
+  },
   index: '/index',
+  previewError: '/preview-error',
 };

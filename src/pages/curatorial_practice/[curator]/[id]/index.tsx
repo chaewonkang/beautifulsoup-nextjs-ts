@@ -16,13 +16,20 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../../state/index';
 
 /* interface */
-import type { IParams, IPreviewData, TPageCommonProps } from '../../../../../interfaces/index';
+import type {
+  IParams,
+  IPreviewData,
+  TPageCommonProps,
+  TRedirectProps,
+} from '../../../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { workPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
-import { TWorkPageData, workPageData } from '@/schemas';
+import { TWorkPageData, workPageDataNullable } from '@/schemas';
 import ContentSection from 'components/ContentSection';
 import workContentSectionTextBlockComponents from 'components/portableText/workContentSectionTextBlockComponents';
+import { sanityEditorToken } from '@/lib/serverEnvs';
+import { routes } from '@/lib/constants';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -557,26 +564,28 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   };
 };
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
-  const { previewData, params } = ctx;
+export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = async (ctx) => {
+  const { preview, params } = ctx;
 
   const projectSlug = params?.curator;
   const workSlug = params?.id;
   if (!projectSlug || !workSlug) throw new Error('Param missing');
 
-  // Only published data is fetched inside getStaticProps,
-  // Seems safe to assume error is thrown only if work = null
   try {
-    const { work } = workPageData.parse(
+    const { work } = workPageDataNullable.parse(
       await publicClient.fetch(workPageQuery, { projectSlug, workSlug })
     );
+    if (!work) return { notFound: true };
     return {
       props: {
-        previewToken: previewData ? previewData.previewToken : null,
+        previewToken: preview ? sanityEditorToken : null,
         work,
       },
     };
   } catch (err) {
-    return { notFound: true };
+    return {
+      redirect: { destination: routes.previewError },
+      props: { redirect: true }, // Prevent props type error
+    };
   }
 };

@@ -1,15 +1,13 @@
+import { sanityEditorToken } from '@/lib/serverEnvs';
 import { createClient, groq } from 'next-sanity';
 import { apiVersion, dataset, projectId } from './config';
-
-const token = process.env.SANITY_API_EDITOR_TOKEN;
-if (!token) throw new Error('Env var missing: `SANITY_API_EDITOR_TOKEN`');
 
 export const editorClient = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: false,
-  token,
+  token: sanityEditorToken,
 });
 
 // Some convenient functions

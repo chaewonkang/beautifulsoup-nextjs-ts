@@ -9,25 +9,8 @@ import Script from 'next/script';
 import Head from 'next/head';
 import { RecoilRoot } from 'recoil';
 import { TPageCommonProps } from 'interfaces';
-import { PreviewSuspense } from 'next-sanity/preview';
-import Preview from '@/sanity/Preview';
-import { routes } from '@/lib/constants';
-import {
-  aboutPageQuery,
-  curatorialPracticePageQuery,
-  indexPageQuery,
-  landingPageQuery,
-  projectPageQuery,
-  workPageQuery,
-} from '@/sanity/queries';
-import {
-  aboutPageData,
-  curatorialPracticePageData,
-  indexPageData,
-  landingPageData,
-  projectPageData,
-  workPageData,
-} from '@/schemas';
+import { gaTrackingId } from '@/lib/clientEnvs';
+import WithPreviewByPathname from 'components/WithPreviewByPathname';
 
 export default function App({ Component, pageProps }: AppProps<TPageCommonProps>) {
   const router = useRouter();
@@ -52,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps<TPageCommonProps>
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
       />
       <Script
         id="gtag-init"
@@ -62,7 +45,7 @@ export default function App({ Component, pageProps }: AppProps<TPageCommonProps>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${gtag.GA_TRACKING_ID}', {
+            gtag('config', '${gaTrackingId}', {
               page_path: window.location.pathname,
             });
           `,
@@ -73,36 +56,9 @@ export default function App({ Component, pageProps }: AppProps<TPageCommonProps>
       </Head>
 
       <RecoilRoot>
-        {previewToken ? (
-          <Preview
-            previewToken={previewToken}
-            {...(pathname === routes.landing
-              ? { query: landingPageQuery, schema: landingPageData }
-              : pathname === routes.about
-              ? { query: aboutPageQuery, schema: aboutPageData }
-              : pathname === routes.curatorialPractice
-              ? { query: curatorialPracticePageQuery, schema: curatorialPracticePageData }
-              : pathname === routes.project.pathname
-              ? {
-                  query: projectPageQuery,
-                  params: { projectSlug: query.curator },
-                  schema: projectPageData,
-                }
-              : pathname === routes.work.pathname
-              ? {
-                  query: workPageQuery,
-                  params: { projectSlug: query.curator, workSlug: query.id },
-                  schema: workPageData,
-                }
-              : pathname === routes.index
-              ? { query: indexPageQuery, schema: indexPageData }
-              : {})}
-          >
-            {(pagePreviewProps) => <Component {...pageProps} {...pagePreviewProps} />}
-          </Preview>
-        ) : (
-          <Component {...pageProps} />
-        )}
+        <WithPreviewByPathname previewToken={previewToken}>
+          {(previewProps) => <Component {...pageProps} {...previewProps} />}
+        </WithPreviewByPathname>
       </RecoilRoot>
     </>
   );

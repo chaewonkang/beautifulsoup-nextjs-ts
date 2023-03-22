@@ -27,3 +27,22 @@ export const LinkMark: PortableTextMarkComponent = ({ value, children }) => {
     </a>
   );
 };
+
+const styleAnnotation = typedObject.extend({
+  _type: z.literal('styleAnnotation'),
+  font: z.literal('sans').nullable().optional(),
+});
+export const StyleMark: PortableTextMarkComponent = ({ value, children }) => {
+  const { font } = styleAnnotation.parse(value);
+  return (
+    <span
+      {...(font === 'sans'
+        ? {
+            className: 'sans',
+          }
+        : {})}
+    >
+      {children}
+    </span>
+  );
+};

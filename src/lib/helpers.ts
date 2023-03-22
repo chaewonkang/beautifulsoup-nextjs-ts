@@ -3,12 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import imageUrlBuilder from '@sanity/image-url';
 import { publicClient } from '@/sanity/publicClient';
 
-export const redirectAsPreview = (
-  res: NextApiResponse<string | void>,
-  previewToken: string,
-  Location: string
-): void => {
-  res.setPreviewData({ previewToken });
+export const redirectAsPreview = (res: NextApiResponse<string | void>, Location: string): void => {
+  res.setPreviewData({});
   res.writeHead(307, { Location });
   res.end();
 };
