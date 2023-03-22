@@ -70,6 +70,7 @@ const ArtistBannerComponent = ({
   pathname,
   isCurator,
   colorCode,
+  curatorName,
 }: IArtistBannerProps): JSX.Element => {
   return (
     <div css={ArtistBanner(colorCode)}>
@@ -79,7 +80,7 @@ const ArtistBannerComponent = ({
             <span>{name}</span>
           </Link>
         ) : (
-          <Link href={`/curatorial_practice/chang_eunha/${pathname}`}>
+          <Link href={`/curatorial_practice/${curatorName}/${pathname}`}>
             <span>{name}</span>
           </Link>
         )}

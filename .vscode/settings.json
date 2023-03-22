@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+=======
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+>>>>>>> c782f1c30cd77c48278c8a9eda5c29c30abf664e
 }

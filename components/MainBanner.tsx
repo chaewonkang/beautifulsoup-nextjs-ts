@@ -1,9 +1,10 @@
 import { css, keyframes } from '@emotion/react';
 import theme from '../src/styles/theme';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { urlFor } from '@/lib/helpers';
 
-import SampleImage1 from '/public/images/about_1.png';
+import introBlockComponents from './portableText/introBlockComponents';
+import { PortableText } from '@portabletext/react';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -318,8 +319,14 @@ const BannerModuleTextBox = css`
   }
 `;
 
-const MainBanner = () => {
+interface IMainBannerProps {
+  projectsSectionTitle: string | null;
+  projects: any;
+}
+
+const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
   const router = useRouter();
+  console.log(projects);
   return (
     <div css={Container}>
       <div>
@@ -330,47 +337,43 @@ const MainBanner = () => {
                 animation: ${MarqueeAnimation} 100s linear infinite;
               `}
             >
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span>curators</span>_{projectsSectionTitle}
             </div>
           </div>
         </h2>
       </div>
       <div>
-        <div
-          css={BannerModuleContainer}
-          onClick={() =>
-            router.push({
-              pathname: '/curatorial_practice/ong_jo_lene',
-            })
-          }
-        >
-          <div>
-            <Image src={SampleImage1} alt="sample_image" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              <span>ONG JO-Lene</span>
+        {projects.map((el: any, _i: number) => {
+          return (
+            <div
+              key={_i}
+              css={BannerModuleContainer}
+              onClick={() =>
+                router.push({
+                  pathname: `/curatorial_practice/${el.slug}`,
+                })
+              }
+            >
+              <div>
+                <img
+                  src={urlFor(el.thumbnail.image.asset._id).url()}
+                  alt={el.thumbnail.alt ?? undefined}
+                />
+              </div>
+              <div css={BannerModuleTextBox}>
+                <div>
+                  <span>{el.curator.name}</span>
+                </div>
+                <div>
+                  <PortableText value={el.intro} components={introBlockComponents} />
+                </div>
+                <div>
+                  <p>{el.contentExcerpt}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p>
-                Yun Choi, Finn Maätita & Jerrold Saija, Jesse Chun, Sung Hwan Kim, Liz Ferrer and
-                Bow Ty Venture Capital, Okui Lala & Nasrikah, & PERTIMIG, Nina Djekić, Isola Tong
-              </p>
-            </div>
-            <div>
-              <p>
-                Slippery Tongues Sliding Horizons
-                <br />
-                Composed in the key of ‘open’—one of the five keywords in Five Inclusion Tactics for
-                Seven Curators: empowering, supportive, cooperative, open, fair—Slippery Tongues
-                Sliding Horizons speaks with experiences of navigating multiple languages and
-                existing between fixed...
-              </p>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

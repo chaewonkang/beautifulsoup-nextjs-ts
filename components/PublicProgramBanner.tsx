@@ -1,7 +1,9 @@
 import { css, keyframes } from '@emotion/react';
 import theme from '../src/styles/theme';
 import Image from 'next/image';
-import SampleImage1 from '/public/images/about_1.png';
+import { urlFor } from '@/lib/helpers';
+import { PortableText } from '@portabletext/react';
+import introBlockComponents from './portableText/introBlockComponents';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -319,7 +321,12 @@ const BannerModuleTextBox = css`
   }
 `;
 
-const PublicProgramBanner = () => {
+interface IPublicProgramBannerProps {
+  programsSectionTitle: string | null;
+  programs: any;
+}
+
+const PublicProgramBanner = ({ programsSectionTitle, programs }: IPublicProgramBannerProps) => {
   return (
     <div css={Container}>
       <div>
@@ -330,51 +337,36 @@ const PublicProgramBanner = () => {
                 animation: ${MarqueeAnimation} 100s linear infinite;
               `}
             >
-              <span>curators</span>
-              _The_5_Inclusion_Tactics_For_Curators_“empowering,_supportive,_open,
-              _fair,_cooperative"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span>curators</span>_{programsSectionTitle}
             </div>
           </div>
         </h2>
       </div>
       <div>
-        <div css={BannerModuleContainer}>
-          <div>
-            <Image src={SampleImage1} alt="sample_image" />
-          </div>
-          <div css={BannerModuleTextBox}>
-            <div>
-              public_program
-              <span>_blurring_with_tears_for_35_minutes</span>
+        {programs.map((el: any, _i: number) => {
+          return (
+            <div css={BannerModuleContainer} key={el._id}>
+              <div>
+                <img
+                  src={urlFor(el.thumbnail.image.asset._id).url()}
+                  alt={el.thumbnail.alt ?? undefined}
+                />
+              </div>
+              <div css={BannerModuleTextBox}>
+                <div>
+                  public_program
+                  <span>{el.title}</span>
+                </div>
+                <div>
+                  <PortableText value={el.intro} components={introBlockComponents} />
+                </div>
+                <div>
+                  <p>{el.contentExcerpt}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p>beautifulsoup.org</p>
-            </div>
-            <div>
-              <p>
-                Blurring with tears for 35 minutes
-                <br />
-                The title of this performance, ‘Blurring with tears for 35 minutes’ revisits the
-                imagery of Kumgang Spring Dream (2016) by Yun Choi and implies the running time of
-                Choi’s action to occupy the website of Beautiful Soup. Anonymous participants on
-                multiple screens, where past, present, and future tenses are entangled and bundled.
-                With the obscure layers of mumbling and chanting from her studio, sobbing and crying
-                from Kumgang Spring Dream, the participants choose either to mourn or to welcome the
-                unknowns.
-                <br />
-                Live Streaming Performance
-                <br /> 15.25-16.00 (CET), 23.25-24.00 (KST), Wednesday, 14 December
-                <br /> On website (beautifulsoup.org),
-                <br />
-                Rijksakademie van beeldende kunsten A18,
-                <br /> and unknown access points
-                <br /> Artist: Yun Choi @ycuhnoi <br />
-                Associate curator: Miji Lee @miji.e
-                <br /> & Anonymous participants: Gim Ikhyun @kimkhimgim , 김감孫하惠 @qoreanqurl
-              </p>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

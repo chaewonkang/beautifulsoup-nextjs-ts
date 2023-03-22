@@ -1,37 +1,25 @@
 import React from 'react';
 import { css, keyframes } from '@emotion/react';
-
+import { urlFor } from '@/lib/helpers';
 import theme from '../../styles/theme';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 /* comps */
 import { PageLayout } from '../../../components';
-import { useRouter } from 'next/router';
 
 /* states */
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
 
 import arrowDownImage from 'public/images/arrowDown.png';
-import SampleImage1 from 'public/images/about_1.png';
-
-type TKeywordArray = string[];
-type TCategoryArray = string[];
-
-const keywordArr: TKeywordArray = ['all', 'open'];
-
-const categoryArr: TCategoryArray = [
-  'all',
-  'video',
-  'photography',
-  'chreography',
-  'performance',
-  'literature',
-  'non-fiction',
-  'sculpture',
-  'painting',
-  'technology',
-];
+import { publicClient } from '@/sanity/publicClient';
+import { curatorialPracticePageQuery } from '@/sanity/queries';
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/schemas';
+import { PortableText } from '@portabletext/react';
+import introBlockComponents from 'components/portableText/introBlockComponents';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -167,6 +155,10 @@ const keywordContainer = css`
       line-height: 40px;
       letter-spacing: ${theme.letterSpacing.serif};
       cursor: pointer;
+      margin-right: 16px;
+      :hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -211,6 +203,11 @@ const filterContainer = css`
       line-height: 40px;
       letter-spacing: ${theme.letterSpacing.sans};
       cursor: pointer;
+      margin-right: 16px;
+
+      :hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -245,7 +242,6 @@ const ContentContainer = css`
 
 const ModuleContainer = css`
   width: 50%;
-
   height: auto;
   cursor: pointer;
   display: flex;
@@ -254,7 +250,10 @@ const ModuleContainer = css`
   &:nth-of-type(2n) {
     & > div:first-of-type {
       padding-right: 0;
-      padding-left: 8px;
+
+      img {
+        padding-left: 8px;
+      }
     }
 
     & > div:last-of-type {
@@ -267,12 +266,13 @@ const ModuleContainer = css`
 
   & > div:first-of-type {
     width: 100%;
+    position: relative;
     height: 35vh;
     min-height: 400px;
-    padding-right: 8px;
 
     img {
       width: 100%;
+      padding-right: 8px;
       height: 100%;
       object-fit: cover;
     }
@@ -315,7 +315,7 @@ const ModuleContainer = css`
     & > div:first-of-type {
       min-height: 230px;
       height: 30vh;
-      padding-right: 0;0
+      padding-right: 0;
     }
   }
 `;
@@ -437,47 +437,72 @@ const ModuleTextWrapper = css`
   }
 `;
 
-const Module = () => {
-  const router = useRouter();
+type TProps = TPageCommonProps & TCuratorialPracticePageData;
 
-  const [keywordIsOpen, setKeywordIsOpen] = React.useState(false);
-  const [filterisOpen, setFilterIsOpen] = React.useState(false);
-
-  return (
-    <div
-      css={ModuleContainer}
-      onClick={() =>
-        router.push({
-          pathname: '/curatorial_practice/a_new_vision_of_vision',
-        })
-      }
-    >
-      <div>
-        <img src="../../static/images/curators/jolene.jpg" />
-      </div>
-      <div css={ModuleTextWrapper}>
-        <div>
-          <h5></h5>
-        </div>
-        <div>
-          <h6></h6>
-        </div>
-        <div>
-          <p></p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CuratorialPractice = (): JSX.Element => {
+const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
   const router = useRouter();
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
+  const [projectsArr, setProjectsArr] =
+    React.useState<TCuratorialPracticePageData['projects']>(projects);
 
   React.useEffect(() => {
     setHeaderColor('#fff');
-  }, []);
+  });
+
+  function filteredByTag(array: TCuratorialPracticePageData['projects'], target: string): void {
+    const newArray: TCuratorialPracticePageData['projects'] = [];
+
+    array.map((el) => {
+      const { tags } = el;
+      tags.map((tag) => {
+        if (tag.title === target) newArray.push(el);
+      });
+    });
+
+    setProjectsArr(newArray);
+  }
+
+  function filteredByCategory(
+    array: TCuratorialPracticePageData['projects'],
+    target: string
+  ): void {
+    const newArray: TCuratorialPracticePageData['projects'] = [];
+
+    array.map((el) => {
+      const { categories } = el;
+      categories.map((category) => {
+        if (category.title === target) newArray.push(el);
+      });
+    });
+
+    setProjectsArr(newArray);
+  }
+
+  function sortedByAlphabet(array: TCuratorialPracticePageData['projects']): void {
+    array.sort((a, b) => {
+      if (a.title > b.title) return 1;
+      if (a.title < b.title) return -1;
+      return 0;
+    });
+
+    const newArray = [...array];
+    setProjectsArr(newArray);
+  }
+
+  function sortedByDate(array: TCuratorialPracticePageData['projects']): void {
+    array.sort((a, b) => {
+      if (a.postedAt > b.postedAt) return -1;
+      if (a.postedAt < b.postedAt) return 1;
+      return 0;
+    });
+
+    const newArray = [...array];
+    setProjectsArr(newArray);
+  }
+
+  console.log(projects);
+
   return (
     <React.Fragment>
       <style jsx global>{`
@@ -493,73 +518,100 @@ const CuratorialPractice = (): JSX.Element => {
             </div>
             <div>
               <ul>
-                <li>recent</li>
-                <li>a-z</li>
+                <li
+                  onClick={() => {
+                    sortedByDate(projects);
+                  }}
+                >
+                  recent
+                </li>
+                <li
+                  onClick={() => {
+                    sortedByAlphabet(projectsArr);
+                  }}
+                >
+                  a-z
+                </li>
               </ul>
             </div>
           </div>
           <div css={keywordContainer}>
             <ul>
-              {keywordArr &&
-                keywordArr.map((el, _i) => {
-                  return <li key={_i}>{el}&nbsp;/&nbsp;</li>;
+              <li onClick={() => setProjectsArr(projects)}>all</li>
+              {tags &&
+                tags.map((el, _i) => {
+                  return (
+                    <li key={_i} onClick={() => filteredByTag(projects, el.title)}>
+                      {el.title}
+                    </li>
+                  );
                 })}
             </ul>
             <Image src={arrowDownImage} alt="아래 화살표" layout="intrinsic" />
           </div>
           <div css={filterContainer}>
             <ul>
-              {categoryArr &&
-                categoryArr.map((el, _i) => {
-                  return <li key={_i}>{el}&nbsp;/&nbsp;</li>;
+              <li onClick={() => setProjectsArr(projects)}>all</li>
+              {categories &&
+                categories.map((el, _i) => {
+                  return (
+                    <li key={_i} onClick={() => filteredByCategory(projects, el.title)}>
+                      {el.title}
+                    </li>
+                  );
                 })}
             </ul>
             <Image src={arrowDownImage} alt="아래 화살표" layout="intrinsic" />
           </div>
           <div css={ContentContainer}>
-            <div
-              css={ModuleContainer}
-              onClick={() =>
-                router.push({
-                  pathname: '/curatorial_practice/ong_jo_lene',
-                })
-              }
-            >
-              <div>
-                <Image src={SampleImage1} alt="sample_image" />
-              </div>
-              <div css={ModuleTextWrapper}>
-                <div>
-                  <h5>
-                    <div css={Marquee}>
-                      <div
-                        css={css`
-                          animation: ${MarqueeAnimation} 100s linear infinite;
-                        `}
-                      >
-                        <span>open</span>
-                        _slippery_tongues_sliding_horizons
-                      </div>
+            {projectsArr &&
+              projectsArr.map((el, _i) => {
+                return (
+                  <div
+                    key={_i}
+                    css={ModuleContainer}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/curatorial_practice/${el.slug}`,
+                      })
+                    }
+                  >
+                    <div>
+                      <Image
+                        src={urlFor(el.thumbnail.image.asset._id).url()}
+                        alt={el.thumbnail.alt ?? ''}
+                        fill
+                      />
                     </div>
-                  </h5>
-                </div>
-                <div>
-                  <p>
-                    Yun Choi, Finn Maätita & Jerrold Saija, Jesse Chun, Sung Hwan Kim, Liz Ferrer
-                    and Bow Ty Venture Capital, Okui Lala & Nasrikah, & PERTIMIG, Nina Djekić, Isola
-                    Tong
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Composed in the key of ‘open’—one of the five keywords in Five Inclusion Tactics
-                    for Seven Curators: empowering, supportive, cooperative, open, fair—Slippery
-                    Tongues Sliding Horizons speaks with experiences of navigating multiple
-                    languages and existing between fixed categories.
-                  </p>
-                </div>
-              </div>
-            </div>
+                    <div css={ModuleTextWrapper}>
+                      <div>
+                        <h5>
+                          <div css={Marquee}>
+                            <div
+                              css={css`
+                                animation: ${MarqueeAnimation} 100s linear infinite;
+                              `}
+                            >
+                              <span>
+                                {el.tags.map((tag, _i) => {
+                                  return tag.title;
+                                })}
+                              </span>
+                              _{el.title}
+                            </div>
+                          </div>
+                        </h5>
+                      </div>
+                      <div>
+                        {el.intro && (
+                          <PortableText value={el.intro} components={introBlockComponents} />
+                        )}
+                      </div>
+                      <div>{el.contentExcerpt && <p>{el.contentExcerpt}</p>}</div>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </PageLayout>
@@ -568,3 +620,22 @@ const CuratorialPractice = (): JSX.Element => {
 };
 
 export default CuratorialPractice;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const test = await publicClient.fetch(curatorialPracticePageQuery);
+
+  const { tags, categories, projects } = curatorialPracticePageData.parse(
+    await publicClient.fetch(curatorialPracticePageQuery)
+  );
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      tags,
+      categories,
+      projects,
+    },
+  };
+};

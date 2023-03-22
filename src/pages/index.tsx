@@ -8,6 +8,11 @@ import { PageLayout, MainBanner, PublicProgramBanner } from '../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../state/index';
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { publicClient } from '@/sanity/publicClient';
+import { landingPageQuery } from '@/sanity/queries';
+import { landingPageData, TLandingPageData } from '@/schemas';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -21,13 +26,18 @@ const Container = (headerHeight: number) => css`
   }
 `;
 
-const Index = (): JSX.Element => {
+type TProps = TPageCommonProps & TLandingPageData;
+
+const Index = ({ landingPageConfig }: TProps) => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
   React.useEffect(() => {
     setHeaderColor('#fff');
-  });
+  }, []);
+
+  // Test
+  // console.log(landingPageConfig);
 
   return (
     <React.Fragment>
@@ -38,8 +48,14 @@ const Index = (): JSX.Element => {
       `}</style>
       <PageLayout>
         <div css={Container(headerHeight)}>
-          <MainBanner />
-          <PublicProgramBanner />
+          <MainBanner
+            projectsSectionTitle={landingPageConfig.projectsSectionTitle}
+            projects={landingPageConfig.projects}
+          />
+          <PublicProgramBanner
+            programsSectionTitle={landingPageConfig.programsSectionTitle}
+            programs={landingPageConfig.programs}
+          />
         </div>
       </PageLayout>
     </React.Fragment>
@@ -47,3 +63,16 @@ const Index = (): JSX.Element => {
 };
 
 export default Index;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { landingPageConfig } = landingPageData.parse(await publicClient.fetch(landingPageQuery));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      landingPageConfig,
+    },
+  };
+};

@@ -1,7 +1,8 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import theme from '../../styles/theme';
-import Image from 'next/image';
+import { urlFor } from '@/lib/helpers';
+import { useRouter } from 'next/router';
 
 /* comps */
 import { PageLayout } from '../../../components';
@@ -10,8 +11,12 @@ import { PageLayout } from '../../../components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
 
-/* images */
-import SampleImage1 from '/public/images/about_1.png';
+/* props */
+import { GetStaticProps } from 'next';
+import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { publicClient } from '@/sanity/publicClient';
+import { newsPageQuery } from '@/sanity/queries';
+import { newsPageData, TNewsPageData } from '@/schemas';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -156,6 +161,13 @@ const NewsModuleContainer = css`
   & > div:nth-of-type(3) {
     height: 60px;
     display: flex;
+
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    padding-right: 20px;
     align-items: center;
     border-bottom: 2.5px dashed #000;
     font-family: ${theme.fontFamily.sans}, sans-serif;
@@ -222,33 +234,39 @@ const NewsModuleContainer = css`
   }
 `;
 
-const NewsModule = () => {
-  return (
-    <div css={NewsModuleContainer}>
-      <div>
-        <Image src={SampleImage1} alt="sample_image" />
-      </div>
-      <div>2022. 11. 28. </div>
-      <div>A New Vision of Vision</div>
-      <div>
-        <p>
-          Buddhism uses a similar image to describe the interconnectedness of all phenomena. It is
-          called Indra’s Net. When Indra fashioned the world, he made it as a web, and at every knot
-          in the web is tied a pearl. Everything that exists, or has ever existed, every idea that
-          can be thought about, every datum that is true—every…
-        </p>
-      </div>
-    </div>
-  );
-};
+type TProps = TPageCommonProps & TNewsPageData;
 
-const News = (): JSX.Element => {
+const News = ({ articles }: TProps) => {
+  const router = useRouter();
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
+  const [articlesArr, setArticlesArr] = React.useState<TNewsPageData['articles']>(articles);
 
   React.useEffect(() => {
     setHeaderColor('#fff');
   });
+
+  function alphabeticalSort(array: TNewsPageData['articles']): void {
+    array.sort((a, b) => {
+      if (a.title > b.title) return 1;
+      if (a.title < b.title) return -1;
+      return 0;
+    });
+
+    const newArray = [...array];
+    setArticlesArr(newArray);
+  }
+
+  function dateSort(array: TNewsPageData['articles']): void {
+    array.sort((a, b) => {
+      if (a.postedAt > b.postedAt) return -1;
+      if (a.postedAt < b.postedAt) return 1;
+      return 0;
+    });
+
+    const newArray = [...array];
+    setArticlesArr(newArray);
+  }
 
   return (
     <React.Fragment>
@@ -265,13 +283,50 @@ const News = (): JSX.Element => {
             </div>
             <div>
               <ul>
-                <li>recent</li>
-                <li>a-z</li>
+                <li
+                  onClick={() => {
+                    dateSort(articles);
+                  }}
+                >
+                  recent
+                </li>
+                <li
+                  onClick={() => {
+                    alphabeticalSort(articlesArr);
+                  }}
+                >
+                  a-z
+                </li>
               </ul>
             </div>
           </div>
           <div>
-            <NewsModule />
+            {articlesArr &&
+              articlesArr.map((el) => {
+                return (
+                  <div
+                    css={NewsModuleContainer}
+                    key={el._id}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/news/${el.slug}`,
+                      })
+                    }
+                  >
+                    <div>
+                      <img
+                        src={urlFor(el.thumbnail.image.asset._id).url()}
+                        alt={el.thumbnail.alt ?? undefined}
+                      />
+                    </div>
+                    <div>{el.postedAt.slice(0, 10).replace(/-/g, '. ')}</div>
+                    <div>
+                      <span>{el.title}</span>
+                    </div>
+                    <div>{el.contentExcerpt}...</div>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </PageLayout>
@@ -280,3 +335,16 @@ const News = (): JSX.Element => {
 };
 
 export default News;
+
+export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+  const { previewData, params } = ctx;
+
+  const { articles } = newsPageData.parse(await publicClient.fetch(newsPageQuery));
+
+  return {
+    props: {
+      previewToken: previewData ? previewData.previewToken : null,
+      articles,
+    },
+  };
+};
