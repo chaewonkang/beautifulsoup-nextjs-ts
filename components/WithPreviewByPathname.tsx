@@ -21,16 +21,18 @@ import { ComponentProps, ReactNode } from 'react';
 
 interface IProps {
   previewToken: ComponentProps<typeof WithPreview>['previewToken'];
+  previewError: ComponentProps<typeof WithPreview>['previewError'];
   children: ComponentProps<typeof WithPreview>['children'];
 }
 
-const WithPreviewByPathname = ({ previewToken, children }: IProps) => {
+const WithPreviewByPathname = ({ previewToken, previewError, children }: IProps) => {
   const router = useRouter();
   const { pathname, query } = router;
 
   return (
     <WithPreview
       previewToken={previewToken}
+      previewError={previewError}
       {...(pathname === routes.landing
         ? { query: landingPageQuery, schema: landingPageData }
         : pathname === routes.about

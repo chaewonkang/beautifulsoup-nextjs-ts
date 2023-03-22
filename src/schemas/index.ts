@@ -188,7 +188,7 @@ const articleDetail = articleCommon.extend({
 
 export const landingPageData = z.object({
   landingPageConfig: z.object({
-    projectsSectionTitle: z.string().nullable(),
+    projectsSectionTitle: z.string(), //.nullable(),
     projects: z.array(projectPreview).nullable(),
     programsSectionTitle: z.string().nullable(),
     programs: z.array(programPreview).nullable(),

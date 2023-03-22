@@ -11,12 +11,16 @@ import { RecoilRoot } from 'recoil';
 import { TPageCommonProps } from 'interfaces';
 import { gaTrackingId } from '@/lib/clientEnvs';
 import WithPreviewByPathname from 'components/WithPreviewByPathname';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
-export default function App({ Component, pageProps }: AppProps<TPageCommonProps>) {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<TWithPreviewProps<TPageCommonProps>>) {
   const router = useRouter();
 
   const { pathname, query } = router;
-  const { previewToken } = pageProps;
+  const { previewError, previewToken } = pageProps;
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -56,7 +60,7 @@ export default function App({ Component, pageProps }: AppProps<TPageCommonProps>
       </Head>
 
       <RecoilRoot>
-        <WithPreviewByPathname previewToken={previewToken}>
+        <WithPreviewByPathname previewToken={previewToken} previewError={previewError}>
           {(previewProps) => <Component {...pageProps} {...previewProps} />}
         </WithPreviewByPathname>
       </RecoilRoot>

@@ -16,12 +16,7 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../../state/index';
 
 /* interface */
-import type {
-  IParams,
-  IPreviewData,
-  TPageCommonProps,
-  TRedirectProps,
-} from '../../../../../interfaces/index';
+import type { TPageCommonProps, TRedirectProps } from '../../../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { workPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
@@ -30,6 +25,7 @@ import ContentSection from 'components/ContentSection';
 import workContentSectionTextBlockComponents from 'components/portableText/workContentSectionTextBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
 import { routes } from '@/lib/constants';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -564,16 +560,21 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   };
 };
 
-export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview, params } = ctx;
 
   const projectSlug = params?.curator;
   const workSlug = params?.id;
-  if (!projectSlug || !workSlug) throw new Error('Param missing');
+  if (typeof projectSlug !== 'string' || typeof workSlug !== 'string')
+    throw new Error('Param missing');
 
   try {
     const { work } = workPageDataNullable.parse(
-      await publicClient.fetch(workPageQuery, { projectSlug, workSlug })
+      await publicClient.fetch(
+        workPageQuery,
+        { projectSlug, workSlug },
+        { token: preview ? sanityEditorToken : undefined }
+      )
     );
     if (!work) return { notFound: true };
     return {
@@ -584,8 +585,7 @@ export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = 
     };
   } catch (err) {
     return {
-      redirect: { destination: routes.previewError },
-      props: { redirect: true }, // Prevent props type error
+      props: { previewError: true },
     };
   }
 };

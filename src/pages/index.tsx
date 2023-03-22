@@ -9,11 +9,12 @@ import { PageLayout, MainBanner, PublicProgramBanner } from '../../components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../state/index';
 import { GetStaticProps } from 'next';
-import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { TPageCommonProps } from 'interfaces';
 import { publicClient } from '@/sanity/publicClient';
 import { landingPageQuery } from '@/sanity/queries';
 import { landingPageData, TLandingPageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -65,13 +66,23 @@ const Index = ({ landingPageConfig }: TProps) => {
 
 export default Index;
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview } = ctx;
-  const { landingPageConfig } = landingPageData.parse(await publicClient.fetch(landingPageQuery));
-  return {
-    props: {
-      previewToken: preview ? sanityEditorToken : null,
-      landingPageConfig,
-    },
-  };
+  try {
+    const { landingPageConfig } = landingPageData.parse(
+      await publicClient.fetch(landingPageQuery, undefined, {
+        token: preview ? sanityEditorToken : undefined,
+      })
+    );
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        landingPageConfig,
+      },
+    };
+  } catch (err) {
+    return {
+      props: { previewError: true },
+    };
+  }
 };

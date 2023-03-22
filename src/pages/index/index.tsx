@@ -8,7 +8,7 @@ import { PageLayout } from '../../../components';
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
-import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { TPageCommonProps } from 'interfaces';
 import { GetStaticProps } from 'next';
 import { publicClient } from '@/sanity/publicClient';
 import { indexPageQuery } from '@/sanity/queries';
@@ -16,6 +16,7 @@ import { indexPageData, TIndexPageData } from '@/schemas';
 import { PortableText } from '@portabletext/react';
 import introBlockComponents from 'components/portableText/introBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const Container = (headerHeight: number) => css`
   width: 100vw;
@@ -319,13 +320,23 @@ const Index = ({ curators }: TProps): JSX.Element => {
 
 export default Index;
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview } = ctx;
-  const { curators } = indexPageData.parse(await publicClient.fetch(indexPageQuery));
-  return {
-    props: {
-      previewToken: preview ? sanityEditorToken : null,
-      curators,
-    },
-  };
+  try {
+    const { curators } = indexPageData.parse(
+      await publicClient.fetch(indexPageQuery, undefined, {
+        token: preview ? sanityEditorToken : undefined,
+      })
+    );
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        curators,
+      },
+    };
+  } catch (err) {
+    return {
+      props: { previewError: true },
+    };
+  }
 };

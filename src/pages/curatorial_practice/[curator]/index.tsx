@@ -16,18 +16,14 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../state/index';
 
 /* interfaces */
-import type {
-  IParams,
-  IPreviewData,
-  TPageCommonProps,
-  TRedirectProps,
-} from '../../../../interfaces/index';
+import type { TPageCommonProps } from '../../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { projectPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
 import { projectPageDataNullable, TProjectPageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
 import { routes } from '@/lib/constants';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -527,11 +523,11 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   };
 };
 
-export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview, params } = ctx;
 
   const projectSlug = params?.curator;
-  if (!projectSlug) throw new Error('never');
+  if (typeof projectSlug !== 'string') throw new Error('never');
 
   try {
     const { project } = projectPageDataNullable.parse(
@@ -550,8 +546,7 @@ export const getStaticProps: GetStaticProps<TProps | TRedirectProps, IParams> = 
     };
   } catch (err) {
     return {
-      redirect: { destination: routes.previewError },
-      props: { redirect: true }, // Prevent props type error
+      props: { previewError: true },
     };
   }
 };

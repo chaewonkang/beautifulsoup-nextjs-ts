@@ -27,16 +27,19 @@ export const usePreview = definePreview({
 
 interface IProps {
   previewToken?: string | null;
+  previewError?: true | null;
   query?: string;
   params?: Params;
   schema?: z.Schema;
   children: (data: any) => JSX.Element;
 }
 
-const WithPreview = ({ previewToken, query, params, schema, children }: IProps) => {
+const WithPreview = ({ query, params, schema, children, previewToken, previewError }: IProps) => {
+  if (previewError) return <PreviewErrorScreen />;
+
   return previewToken ? (
     <PreviewSuspense fallback="Loading...">
-      <ErrorBoundary FallbackComponent={Redirect}>
+      <ErrorBoundary FallbackComponent={PreviewErrorScreen}>
         <PreviewInner previewToken={previewToken} query={query} params={params} schema={schema}>
           {children}
         </PreviewInner>
@@ -83,14 +86,13 @@ const ExitPreviewButton = () => {
   );
 };
 
-const Redirect = () => {
-  const router = useRouter();
-  useEffect(() => {
-    console.log('ERROR!!');
-    router.replace('/preview-error');
-  }, [router]);
-  return null;
-};
+// const Redirect = () => {
+//   const router = useRouter();
+//   useEffect(() => {
+//     router.replace('/preview-error');
+//   }, [router]);
+//   return null;
+// };
 
 export const PreviewErrorScreen = () => {
   return (
@@ -101,6 +103,7 @@ export const PreviewErrorScreen = () => {
         left: 0,
         bottom: 0,
         right: 0,
+        lineHeight: 1.5,
         backgroundColor: '#fff',
         display: 'flex',
         alignItems: 'center',
@@ -114,3 +117,13 @@ export const PreviewErrorScreen = () => {
     </div>
   );
 };
+
+export type TWithPreviewProps<T> =
+  | (T & {
+      previewError?: never;
+      previewToken: string | null;
+    })
+  | {
+      previewError: true;
+      previewToken?: never;
+    };

@@ -17,5 +17,4 @@ export const routes = {
     path: (articleSlug: string) => `/news/${articleSlug}`,
   },
   index: '/index',
-  previewError: '/preview-error',
 };

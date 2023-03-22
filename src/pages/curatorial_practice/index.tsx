@@ -16,11 +16,12 @@ import arrowDownImage from 'public/images/arrowDown.png';
 import { publicClient } from '@/sanity/publicClient';
 import { curatorialPracticePageQuery } from '@/sanity/queries';
 import { GetStaticProps } from 'next';
-import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { TPageCommonProps } from 'interfaces';
 import { curatorialPracticePageData, TCuratorialPracticePageData } from '@/schemas';
 import { PortableText } from '@portabletext/react';
 import introBlockComponents from 'components/portableText/introBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -622,17 +623,25 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
 
 export default CuratorialPractice;
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview } = ctx;
-  const { tags, categories, projects } = curatorialPracticePageData.parse(
-    await publicClient.fetch(curatorialPracticePageQuery)
-  );
-  return {
-    props: {
-      previewToken: preview ? sanityEditorToken : null,
-      tags,
-      categories,
-      projects,
-    },
-  };
+  try {
+    const { tags, categories, projects } = curatorialPracticePageData.parse(
+      await publicClient.fetch(curatorialPracticePageQuery, undefined, {
+        token: preview ? sanityEditorToken : undefined,
+      })
+    );
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        tags,
+        categories,
+        projects,
+      },
+    };
+  } catch (err) {
+    return {
+      props: { previewError: true },
+    };
+  }
 };

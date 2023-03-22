@@ -11,13 +11,14 @@ import { headerState, headerColorState } from '../../state/index';
 
 /* images */
 import { GetStaticProps } from 'next';
-import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { TPageCommonProps } from 'interfaces';
 import { publicClient } from '@/sanity/publicClient';
 import { aboutPageQuery } from '@/sanity/queries';
 import contentSectionTextBlockComponents from 'components/portableText/contentSectionTextBlockComponents';
 import { aboutPageData, TAboutPageData } from '@/schemas';
 import ContentSection from 'components/ContentSection';
 import { sanityEditorToken } from '@/lib/serverEnvs';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -237,15 +238,23 @@ const About = ({ aboutPageConfig }: TProps) => {
 
 export default About;
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview } = ctx;
-
-  const { aboutPageConfig } = aboutPageData.parse(await publicClient.fetch(aboutPageQuery));
-
-  return {
-    props: {
-      previewToken: preview ? sanityEditorToken : null,
-      aboutPageConfig,
-    },
-  };
+  try {
+    const { aboutPageConfig } = aboutPageData.parse(
+      await publicClient.fetch(aboutPageQuery, undefined, {
+        token: preview ? sanityEditorToken : undefined,
+      })
+    );
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        aboutPageConfig,
+      },
+    };
+  } catch (err) {
+    return {
+      props: { previewError: true },
+    };
+  }
 };

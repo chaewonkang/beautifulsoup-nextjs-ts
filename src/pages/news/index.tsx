@@ -13,11 +13,12 @@ import { headerState, headerColorState } from '../../../state/index';
 
 /* props */
 import { GetStaticProps } from 'next';
-import { IParams, IPreviewData, TPageCommonProps } from 'interfaces';
+import { TPageCommonProps } from 'interfaces';
 import { publicClient } from '@/sanity/publicClient';
 import { newsPageQuery } from '@/sanity/queries';
 import { newsPageData, TNewsPageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
+import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -337,15 +338,23 @@ const News = ({ articles }: TProps) => {
 
 export default News;
 
-export const getStaticProps: GetStaticProps<TProps, IParams, IPreviewData> = async (ctx) => {
+export const getStaticProps: GetStaticProps<TWithPreviewProps<TProps>> = async (ctx) => {
   const { preview } = ctx;
-
-  const { articles } = newsPageData.parse(await publicClient.fetch(newsPageQuery));
-
-  return {
-    props: {
-      previewToken: preview ? sanityEditorToken : null,
-      articles,
-    },
-  };
+  try {
+    const { articles } = newsPageData.parse(
+      await publicClient.fetch(newsPageQuery, undefined, {
+        token: preview ? sanityEditorToken : undefined,
+      })
+    );
+    return {
+      props: {
+        previewToken: preview ? sanityEditorToken : null,
+        articles,
+      },
+    };
+  } catch (err) {
+    return {
+      props: { previewError: true },
+    };
+  }
 };
