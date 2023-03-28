@@ -230,7 +230,7 @@ type TProps = TPageCommonProps & TIndexPageData;
 const Index = ({ curators }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
-  const curatorsRow: number = Math.floor(curators.length / 4);
+  const curatorsRow: number = Math.floor(curators?.length / 4);
   const [curatorsArr, setCuratorsArr] = React.useState<TIndexPageData['curators']>(curators);
 
   function shuffle(array: TIndexPageData['curators']): void {

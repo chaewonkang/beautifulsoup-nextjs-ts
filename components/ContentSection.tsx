@@ -15,7 +15,7 @@ const ContentSection = ({ contentSection: { images, text }, components }: IProps
         {images?.map(({ image, alt, caption }, idx) => (
           <Fragment key={idx}>
             <img src={urlFor(image).url()} alt={alt ?? undefined} />
-            {caption && <span>{parse(caption)}</span>}
+            {caption && <p>{parse(caption)}</p>}
           </Fragment>
         ))}
       </div>
