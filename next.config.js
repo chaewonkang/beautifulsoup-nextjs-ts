@@ -4,6 +4,28 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+      config.resolve.fallback.tls = false;
+      config.resolve.fallback.net = false;
+      config.resolve.fallback.child_process = false;
+    }
+
+    return config;
+  },
+  future: {
+    webpack5: true,
+  },
+  fallback: {
+    fs: false,
+    tls: false,
+    net: false,
+    child_process: false,
+  },
   images: {
     remotePatterns: [
       {
@@ -16,4 +38,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

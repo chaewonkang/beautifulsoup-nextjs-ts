@@ -8,13 +8,14 @@ interface IProps {
   components?: Partial<PortableTextReactComponents>;
 }
 const ContentSection = ({ contentSection: { images, text }, components }: IProps) => {
+  const parse = require('html-react-parser');
   return (
     <div>
       <div>
         {images?.map(({ image, alt, caption }, idx) => (
           <Fragment key={idx}>
             <img src={urlFor(image).url()} alt={alt ?? undefined} />
-            {caption && <p>{caption}</p>}
+            {caption && <span>{parse(caption)}</span>}
           </Fragment>
         ))}
       </div>

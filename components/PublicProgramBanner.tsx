@@ -343,7 +343,7 @@ const PublicProgramBanner = ({ programsSectionTitle, programs }: IPublicProgramB
         </h2>
       </div>
       <div>
-        {programs.map((el: any, _i: number) => {
+        {programs.map((el: any) => {
           return (
             <div css={BannerModuleContainer} key={el._id}>
               <div>
@@ -355,7 +355,7 @@ const PublicProgramBanner = ({ programsSectionTitle, programs }: IPublicProgramB
               <div css={BannerModuleTextBox}>
                 <div>
                   public_program
-                  <span>{el.title}</span>
+                  <span>_{el.title}</span>
                 </div>
                 <div>
                   <PortableText value={el.intro} components={introBlockComponents} />

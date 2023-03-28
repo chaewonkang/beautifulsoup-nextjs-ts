@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import theme from '../src/styles/theme';
+import { getData } from '../src/lib/api/getData';
 
 const Container = css`
   width: 100%;
@@ -77,25 +78,29 @@ const Container = css`
   }
 `;
 
-type FormProps = {
-  onSubmit: (form: { email: string }) => void;
-};
-
 const NewsLetterSubmit = () => {
   const [submitMessage, setSubmitMessage] = React.useState('submit');
-  const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState<string>('');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: any) => {
     const { value } = e.target;
 
     setEmail(value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // onSubmit({ email });
-    setEmail('');
-  };
+  async function handler() {
+    try {
+      const data = await getData();
+      const sheet = await data.sheetsByIndex[0];
+      const newsletter = sheet.addRow({
+        timestamp: new Date(),
+        email: email,
+      });
+
+      setSubmitMessage('submitted!');
+      setEmail('');
+    } catch (error) {}
+  }
 
   return (
     <div css={Container}>
@@ -105,7 +110,7 @@ const NewsLetterSubmit = () => {
       <div>
         <input onChange={onChange} value={email} type="text" placeholder="Enter email" />
       </div>
-      <div>
+      <div onClick={() => handler()}>
         <span>{submitMessage}</span>
       </div>
     </div>
@@ -113,3 +118,12 @@ const NewsLetterSubmit = () => {
 };
 
 export default NewsLetterSubmit;
+
+export async function getServerSideProps() {
+  const data = await getData();
+  const sheet = await data.sheetsByIndex[0];
+
+  return {
+    props: { sheet },
+  };
+}

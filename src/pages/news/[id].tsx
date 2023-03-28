@@ -1,29 +1,31 @@
 import React from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../../styles/theme';
-import { useRouter } from 'next/router';
-import { PortableText } from '@portabletext/react';
+
+import Image from 'next/image';
+import Link from 'next/link';
 
 /* comps */
-import { PageLayout, ArtistBanner } from 'components';
+import { PageLayout } from 'components';
 import ContentSection from 'components/ContentSection';
 import contentSectionTextBlockComponents from 'components/portableText/contentSectionTextBlockComponents';
-import bioBlockComponents from 'components/portableText/bioBlockComponents';
-import noteBlockComponents from 'components/portableText/noteBlockComponents';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../state/index';
 
 /* interfaces */
-import type { TPageCommonProps, TRedirectProps } from '../../../interfaces/index';
+import type { TPageCommonProps } from '../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { articlePageQuery, projectPageQuery } from '@/sanity/queries';
+import { articlePageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
 import { articlePageDataNullable, TArticlePageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
-import { routes } from '@/lib/constants';
+
 import { TWithPreviewProps } from '@/sanity/WithPreview';
+
+/* etc */
+import ArrowLeft from '../../../public/images/arrowLeft.png';
 
 const MarqueeAnimation = keyframes`
 0% {
@@ -291,122 +293,58 @@ const ContentWrapper = css`
   }
 `;
 
-const NoteContainer = css`
+const NewsDetailNavBar = css`
+  height: fit-content;
+  top: 276px;
+  height: 80px;
   width: 100%;
-  border-top: 4px dashed #000;
-  height: auto;
+  border-top: 2.5px solid #000;
   display: flex;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  align-items: center;
+  padding-top: 0;
+  justify-content: space-between;
+  cursor: pointer;
 
-  b {
-    font-style: italic;
+  :hover {
+    cursor: pointer;
   }
 
   & > div:first-of-type {
-    width: calc((100% / 12) * 4 - 20px);
-    font-family: ${theme.fontFamily.serif}, serif;
-    font-size: ${theme.fontSize.bodySerif};
-    line-height: ${theme.lineHeight.bodySerif};
-    letter-spacing: ${theme.letterSpacing.serif};
+    font-family: ${theme.fontFamily.sans}, sans-serif;
+    font-size: ${theme.fontSize.titleSans};
+    line-height: ${theme.lineHeight.titleSans};
+    letter-spacing: ${theme.letterSpacing.sans};
+    width: 100%;
+    overflow: hidden;
   }
 
   & > div:last-of-type {
+    width: 40px;
+    margin-left: 20px;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    width: calc(((100% / 12) * 8) + 20px);
-    font-family: ${theme.fontFamily.sans}, sans-serif;
-    font-size: ${theme.fontSize.smallBodySans};
-    line-height: ${theme.lineHeight.smallBodySans};
-    letter-spacing: ${theme.letterSpacing.sans};
+    align-items: center;
 
-    & > div {
-      display: flex;
-
-      & > span:first-of-type {
-        width: 20px;
-        text-align: left;
-        display: inline-block;
-      }
-
-      & > span:last-of-type {
-        display: inline-block;
-        width: calc(100% - 20px);
-      }
+    img {
+      width: 100%;
+      object-fit: contain;
     }
   }
 
   @media only screen and (max-width: ${theme.size.mobile}) {
-    flex-direction: column;
+    height: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 2.5px solid #000;
 
     & > div:first-of-type {
+      font-size: ${theme.fontSize.m_titleSans};
+      line-height: ${theme.lineHeight.m_titleSans};
       width: 100%;
-      margin-bottom: 16px;
-      font-size: ${theme.fontSize.m_bodySerif};
-      line-height: ${theme.lineHeight.m_bodySerif};
     }
 
     & > div:last-of-type {
-      width: 100%;
-      font-size: ${theme.fontSize.m_captionSans};
-      line-height: ${theme.lineHeight.m_captionSans};
-    }
-  }
-`;
-
-const BioContainer = css`
-  width: 100%;
-  border-top: 4px dashed #000;
-  height: auto;
-  display: flex;
-  padding-top: 16px;
-  padding-bottom: 16px;
-
-  & > div:first-of-type {
-    width: calc((100% / 12) * 4);
-    font-family: ${theme.fontFamily.serif}, serif;
-    font-size: ${theme.fontSize.bodySerif};
-    line-height: ${theme.lineHeight.bodySerif};
-    letter-spacing: ${theme.letterSpacing.serif};
-  }
-
-  & > div:last-of-type {
-    display: flex;
-    flex-direction: column;
-    width: calc(((100% / 12) * 8));
-    font-family: ${theme.fontFamily.sans}, sans-serif;
-    font-size: ${theme.fontSize.smallBodySans};
-    line-height: ${theme.lineHeight.smallBodySans};
-    letter-spacing: ${theme.letterSpacing.sans};
-
-    & > div {
-      & > span:first-of-type {
-        width: 20px;
-        text-align: left;
-        display: inline-block;
-      }
-
-      & > span:last-of-type {
-        display: inline-block;
-        width: calc(100% - 20px);
-      }
-    }
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    flex-direction: column;
-
-    & > div:first-of-type {
-      width: 100%;
-      margin-bottom: 16px;
-      font-size: ${theme.fontSize.m_bodySerif};
-      line-height: ${theme.lineHeight.m_bodySerif};
-    }
-
-    & > div:last-of-type {
-      width: 100%;
-      font-size: ${theme.fontSize.m_captionSans};
-      line-height: ${theme.lineHeight.m_captionSans};
+      width: 20px;
     }
   }
 `;
@@ -416,15 +354,10 @@ type TProps = TPageCommonProps & TArticlePageData;
 const id = ({ article }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
-  const router = useRouter();
-  const id = router.query.curator as string;
 
   React.useEffect(() => {
     setHeaderColor('#fff');
   });
-
-  // Test
-  console.log(article);
 
   return (
     <React.Fragment>
@@ -448,7 +381,7 @@ const id = ({ article }: TProps): JSX.Element => {
                         animation: ${MarqueeAnimation} 100s linear infinite;
                       `}
                     >
-                      날짜
+                      {article.postedAt.slice(0, 10).replace(/-/g, '. ')}
                     </div>
                   </div>
                 </h3>
@@ -461,25 +394,29 @@ const id = ({ article }: TProps): JSX.Element => {
                         animation: ${MarqueeAnimation} 100s linear infinite;
                       `}
                     >
-                      타이틀
+                      {article.title}
                     </div>
                   </div>
                 </h3>
               </div>
             </div>
-            <div css={ContentWrapper}>컨텐츠</div>
-            <div css={NoteContainer}>
-              <div>
-                <span>Note</span>
-              </div>
-              <div>노트</div>
+            <div css={ContentWrapper}>
+              {article.content?.map((contentSection, idx) => (
+                <ContentSection
+                  key={idx}
+                  contentSection={contentSection}
+                  components={contentSectionTextBlockComponents}
+                />
+              ))}
             </div>
-            <div css={BioContainer}>
-              <div>
-                <span>Bio</span>
+            <Link href="/news">
+              <div css={NewsDetailNavBar}>
+                <div>Back To List</div>
+                <div>
+                  <Image src={ArrowLeft} alt="arrow_left" />
+                </div>
               </div>
-              <div>바이오</div>
-            </div>
+            </Link>
           </div>
         </div>
       </PageLayout>

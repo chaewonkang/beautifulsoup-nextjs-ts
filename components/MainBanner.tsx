@@ -326,7 +326,7 @@ interface IMainBannerProps {
 
 const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
   const router = useRouter();
-  console.log(projects);
+
   return (
     <div css={Container}>
       <div>

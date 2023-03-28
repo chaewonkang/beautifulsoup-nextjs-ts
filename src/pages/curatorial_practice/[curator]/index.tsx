@@ -22,7 +22,7 @@ import { projectPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
 import { projectPageDataNullable, TProjectPageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
-import { routes } from '@/lib/constants';
+
 import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const MarqueeAnimation = keyframes`
@@ -419,12 +419,7 @@ const id = ({ project }: TProps): JSX.Element => {
   const router = useRouter();
   const id = router.query.curator as string;
 
-  React.useEffect(() => {
-    setHeaderColor('#fff');
-  });
-
-  // Test
-  console.log(project);
+  setHeaderColor('#fff');
 
   return (
     <React.Fragment>

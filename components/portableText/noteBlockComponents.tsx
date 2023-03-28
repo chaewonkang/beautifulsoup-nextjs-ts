@@ -1,10 +1,8 @@
 import { PortableTextListComponent, PortableTextProps } from '@portabletext/react';
-import { Paragraph } from './blocks';
+
 import { SuperscriptMark, LinkMark } from './marks';
 
 const NumberedList: PortableTextListComponent = ({ children }) => {
-  console.log(children);
-
   return (
     <div>
       <span>1</span>
@@ -14,7 +12,6 @@ const NumberedList: PortableTextListComponent = ({ children }) => {
 };
 
 const BulletedList: PortableTextListComponent = ({ children }) => {
-  console.log(children);
   return (
     <div>
       <span>{children}</span>

@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { css, keyframes } from '@emotion/react';
 import theme from '../../../../styles/theme';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+
 import { PortableText } from '@portabletext/react';
 
 /* comps */
@@ -16,7 +15,7 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { headerState, headerColorState } from '../../../../../state/index';
 
 /* interface */
-import type { TPageCommonProps, TRedirectProps } from '../../../../../interfaces/index';
+import type { TPageCommonProps } from '../../../../../interfaces/index';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { workPageQuery } from '@/sanity/queries';
 import { publicClient } from '@/sanity/publicClient';
@@ -24,7 +23,6 @@ import { TWorkPageData, workPageDataNullable } from '@/schemas';
 import ContentSection from 'components/ContentSection';
 import workContentSectionTextBlockComponents from 'components/portableText/workContentSectionTextBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
-import { routes } from '@/lib/constants';
 import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 const MarqueeAnimation = keyframes`
@@ -186,14 +184,17 @@ const ContentWrapper = css`
       display: flex;
       flex-direction: column;
 
+      em,
+      b {
+        font-style: italic !important;
+      }
+
       & > img {
         width: 100%;
       }
 
+      & > span,
       & > p {
-        em {
-          font-style: italic;
-        }
         margin-top: 8px;
         margin-bottom: 8px;
         font-family: ${theme.fontFamily.sans}, sans-serif;
@@ -429,15 +430,8 @@ type TProps = TPageCommonProps & TWorkPageData;
 const id = ({ work }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
-  const router = useRouter();
-  const id = router.query.id as string;
 
-  useEffect(() => {
-    setHeaderColor(work.color);
-  });
-
-  // Test
-  console.log(work);
+  setHeaderColor(work.color);
 
   return (
     <React.Fragment>
@@ -502,7 +496,6 @@ const id = ({ work }: TProps): JSX.Element => {
                   );
                 }
                 if (item._type === 'workContentSlot') {
-                  console.log(item.id);
                   if (item.id === 'ninaDjekic') return <NinaDjekic />;
                   return null;
                 }

@@ -503,8 +503,6 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
     setProjectsArr(newArray);
   }
 
-  console.log(projects);
-
   return (
     <React.Fragment>
       <style jsx global>{`
@@ -595,9 +593,15 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
                               `}
                             >
                               <span>
-                                {el.tags.map((tag, _i) => {
-                                  return tag.title;
-                                })}
+                                {el.tags.length > 1
+                                  ? el.tags.map((tag) => {
+                                      if (el.tags.indexOf(tag) < el.tags.length - 1)
+                                        return tag.title + '+';
+                                      else return tag.title;
+                                    })
+                                  : el.tags.map((tag) => {
+                                      return tag.title;
+                                    })}
                               </span>
                               _{el.title}
                             </div>
