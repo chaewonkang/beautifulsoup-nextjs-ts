@@ -1,8 +1,6 @@
 import { groq } from 'next-sanity';
 import { definePreview, Params, PreviewSuspense } from 'next-sanity/preview';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { z } from 'zod';
 import { dataset, projectId } from './config';

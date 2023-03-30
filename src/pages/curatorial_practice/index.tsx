@@ -581,7 +581,7 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
                           <PortableText value={el.intro} components={introBlockComponents} />
                         )}
                       </div>
-                      <div>{el.contentExcerpt && <p>{el.contentExcerpt}</p>}</div>
+                      <div>{el.contentExcerpt && <p>{el.contentExcerpt}...</p>}</div>
                     </div>
                   </div>
                 );

@@ -214,7 +214,7 @@ const ContentWrapper = css`
           letter-spacing: ${theme.letterSpacing.sans};
         }
 
-        b {
+        em {
           font-style: italic;
         }
       }

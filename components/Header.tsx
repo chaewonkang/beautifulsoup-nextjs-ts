@@ -322,8 +322,8 @@ const Header = ({ menuIsOpen, setMenuIsOpen }: IHeaderProps): JSX.Element => {
           <Link href="/about" style={{ textDecoration: 'none' }}>
             <li>3_about</li>
           </Link>
-          <Link href="/index" style={{ textDecoration: 'none' }}>
-            <li>4_index</li>
+          <Link href="/curators" style={{ textDecoration: 'none' }}>
+            <li>4_curators</li>
           </Link>
         </ul>
       </div>
