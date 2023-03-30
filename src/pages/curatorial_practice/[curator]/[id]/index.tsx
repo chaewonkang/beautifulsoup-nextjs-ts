@@ -9,6 +9,7 @@ import { PageLayout, ArtistBanner } from '../../../../../components';
 import bioBlockComponents from 'components/portableText/bioBlockComponents';
 import noteBlockComponents from 'components/portableText/noteBlockComponents';
 import NinaDjekic from '../../../../../components/custom/NinaDjekic';
+import HyejinJo from 'components/custom/HyejinJo';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -24,42 +25,7 @@ import ContentSection from 'components/ContentSection';
 import workContentSectionTextBlockComponents from 'components/portableText/workContentSectionTextBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
 import { TWithPreviewProps } from '@/sanity/WithPreview';
-
-const MarqueeAnimation = keyframes`
-0% {
-    transform: translate3d(var(--move-initial), 0, 0);
-}
-
-100% {
-    transform: translate3d(var(--move-final), 0, 0);
-}
-`;
-
-const Marquee = css`
-  width: 1600vw;
-  position: relative;
-  overflow: hidden;
-  --offset: 20vw;
-  --move-initial: calc(0);
-  --move-final: calc(-50% + var(--offset));
-  display: flex;
-  align-items: center;
-
-  & > div {
-    width: fit-content;
-    display: inline-block;
-    position: relative;
-    overflow: hidden !important;
-    transform: translate3d(var(--move-initial), 0, 0);
-    animation-play-state: paused;
-    animation-play-state: running;
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-`;
+import Marquee from 'react-fast-marquee';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -148,6 +114,7 @@ const ContentWrapper = css`
   height: auto;
   display: flex;
   flex-direction: column;
+  padding-bottom: 36px;
 
   & > div {
     width: 100%;
@@ -234,7 +201,7 @@ const ContentWrapper = css`
 
       p {
         width: 100%;
-        margin-bottom: ${theme.lineHeight.bodySerif};
+
         font-family: ${theme.fontFamily.serif}, serif;
         font-size: ${theme.fontSize.bodySerif};
         line-height: ${theme.lineHeight.bodySerif};
@@ -318,7 +285,7 @@ const NoteContainer = css`
   }
 
   & > div:first-of-type {
-    width: calc((100% / 12) * 4 - 20px);
+    width: calc((100% / 12) * 4);
     font-family: ${theme.fontFamily.serif}, serif;
     font-size: ${theme.fontSize.bodySerif};
     line-height: ${theme.lineHeight.bodySerif};
@@ -328,7 +295,7 @@ const NoteContainer = css`
   & > div:last-of-type {
     display: flex;
     flex-direction: column;
-    width: calc(((100% / 12) * 8) + 20px);
+    width: calc(((100% / 12) * 8));
     font-family: ${theme.fontFamily.sans}, sans-serif;
     font-size: ${theme.fontSize.smallBodySans};
     line-height: ${theme.lineHeight.smallBodySans};
@@ -336,17 +303,6 @@ const NoteContainer = css`
 
     & > div {
       display: flex;
-
-      & > span:first-of-type {
-        width: 20px;
-        text-align: left;
-        display: inline-block;
-      }
-
-      & > span:last-of-type {
-        display: inline-block;
-        width: calc(100% - 20px);
-      }
     }
   }
 
@@ -425,6 +381,89 @@ const BioContainer = css`
   }
 `;
 
+const AttachmentContainer = css`
+  width: 100%;
+  border-top: 4px dashed #000;
+  height: auto;
+  display: flex;
+  padding-top: 16px;
+  padding-bottom: 16px;
+
+  & > div:first-of-type {
+    width: calc((100% / 12) * 4);
+    span {
+      font-family: ${theme.fontFamily.serif}, serif !important;
+      font-size: ${theme.fontSize.bodySerif} !important;
+      line-height: ${theme.lineHeight.bodySerif} !important;
+      letter-spacing: ${theme.letterSpacing.serif} !important;
+    }
+  }
+
+  & > div:last-of-type {
+    width: calc((100% / 12) * 8);
+    display: flex;
+    flex-direction: column;
+    :hover {
+      opacity: 0.5;
+    }
+
+    & > div {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      font-family: ${theme.fontFamily.sans}, sans-serif;
+      font-size: ${theme.fontSize.smallBodySans};
+      line-height: ${theme.lineHeight.smallBodySans};
+      letter-spacing: ${theme.letterSpacing.sans};
+      cursor: pointer;
+      height: 40px;
+
+      :hover {
+        opacity: 0.5;
+      }
+
+      span {
+        width: calc(100% - 32px);
+        text-decoration: underline;
+      }
+
+      img {
+        width: 20px !important;
+        margin-left: 12px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  @media only screen and (max-width: ${theme.size.mobile}) {
+    flex-direction: column;
+
+    & > div:first-of-type {
+      width: 100%;
+      margin-bottom: 16px;
+      font-size: ${theme.fontSize.m_bodySerif};
+      line-height: ${theme.lineHeight.m_bodySerif};
+    }
+
+    & > div:last-of-type {
+      width: 100%;
+      font-size: ${theme.fontSize.m_captionSans};
+      line-height: ${theme.lineHeight.m_captionSans};
+
+      span {
+        width: calc(100% - 25px);
+        text-decoration: underline;
+      }
+
+      img {
+        width: 15px;
+        margin-left: 10px;
+        object-fit: contain;
+      }
+    }
+  }
+`;
+
 type TProps = TPageCommonProps & TWorkPageData;
 
 const id = ({ work }: TProps): JSX.Element => {
@@ -432,6 +471,17 @@ const id = ({ work }: TProps): JSX.Element => {
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
   setHeaderColor(work.color);
+
+  function handleFileDownload(url: string, filename: string) {
+    fetch(url).then(function (t) {
+      return t.blob().then((b) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.setAttribute('download', filename);
+        a.click();
+      });
+    });
+  }
 
   return (
     <React.Fragment>
@@ -445,30 +495,14 @@ const id = ({ work }: TProps): JSX.Element => {
           <div css={ContentContainer(headerHeight, headerColor)}>
             <div>
               <div>
-                <h3>
-                  <div css={Marquee}>
-                    <div
-                      css={css`
-                        animation: ${MarqueeAnimation} 100s linear infinite;
-                      `}
-                    >
-                      {work.artistName}
-                    </div>
-                  </div>
-                </h3>
+                <Marquee pauseOnHover speed={5} gradient={false}>
+                  <h3>{work.artistName}</h3>
+                </Marquee>
               </div>
               <div>
-                <h3>
-                  <div css={Marquee}>
-                    <div
-                      css={css`
-                        animation: ${MarqueeAnimation} 100s linear infinite;
-                      `}
-                    >
-                      {work.title}
-                    </div>
-                  </div>
-                </h3>
+                <Marquee pauseOnHover speed={5} gradient={false}>
+                  <h3>{work.title}</h3>
+                </Marquee>
               </div>
             </div>
             <div css={ContentWrapper}>
@@ -497,6 +531,7 @@ const id = ({ work }: TProps): JSX.Element => {
                 }
                 if (item._type === 'workContentSlot') {
                   if (item.id === 'ninaDjekic') return <NinaDjekic />;
+                  if (item.id === 'hyejinJo') return <HyejinJo />;
                   return null;
                 }
               })}
@@ -519,6 +554,27 @@ const id = ({ work }: TProps): JSX.Element => {
                 {work.bio && <PortableText value={work.bio} components={bioBlockComponents} />}
               </div>
             </div>
+            {work.attachments && (
+              <div css={AttachmentContainer}>
+                <div>
+                  <span>Attachment</span>
+                </div>
+                <div>
+                  {work.attachments.map((attachment) => {
+                    return (
+                      <div key={attachment.title}>
+                        <span
+                          onClick={() => handleFileDownload(attachment.file.url, attachment.title)}
+                        >
+                          {attachment.title}
+                        </span>
+                        <img src="/images/download.png" alt="download" />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {work.otherWorks &&
               work.otherWorks.map((el, _i) => (
                 <ArtistBanner

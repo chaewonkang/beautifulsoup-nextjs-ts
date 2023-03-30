@@ -26,42 +26,7 @@ import { TWithPreviewProps } from '@/sanity/WithPreview';
 
 /* etc */
 import ArrowLeft from '../../../public/images/arrowLeft.png';
-
-const MarqueeAnimation = keyframes`
-0% {
-    transform: translate3d(var(--move-initial), 0, 0);
-}
-
-100% {
-    transform: translate3d(var(--move-final), 0, 0);
-}
-`;
-
-const Marquee = css`
-  width: 1600vw;
-  position: relative;
-  overflow: hidden;
-  --offset: 20vw;
-  --move-initial: calc(0);
-  --move-final: calc(-50% + var(--offset));
-  display: flex;
-  align-items: center;
-
-  & > div {
-    width: fit-content;
-    display: inline-block;
-    position: relative;
-    overflow: hidden !important;
-    transform: translate3d(var(--move-initial), 0, 0);
-    animation-play-state: paused;
-    animation-play-state: running;
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-`;
+import Marquee from 'react-fast-marquee';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -197,7 +162,8 @@ const ContentWrapper = css`
         width: 100%;
       }
 
-      & > span {
+      & > span,
+      & > p {
         em {
           font-style: italic;
         }
@@ -306,7 +272,7 @@ const NewsDetailNavBar = css`
   cursor: pointer;
 
   :hover {
-    cursor: pointer;
+    opacity: 0.5;
   }
 
   & > div:first-of-type {
@@ -374,30 +340,14 @@ const id = ({ article }: TProps): JSX.Element => {
           <div css={ContentContainer(headerHeight)}>
             <div>
               <div>
-                <h3>
-                  <div css={Marquee}>
-                    <div
-                      css={css`
-                        animation: ${MarqueeAnimation} 100s linear infinite;
-                      `}
-                    >
-                      {article.postedAt.slice(0, 10).replace(/-/g, '. ')}
-                    </div>
-                  </div>
-                </h3>
+                <Marquee pauseOnHover speed={5} gradient={false}>
+                  <h3>{article.postedAt.slice(0, 10).replace(/-/g, '. ')}</h3>
+                </Marquee>
               </div>
               <div>
-                <h3>
-                  <div css={Marquee}>
-                    <div
-                      css={css`
-                        animation: ${MarqueeAnimation} 100s linear infinite;
-                      `}
-                    >
-                      {article.title}
-                    </div>
-                  </div>
-                </h3>
+                <Marquee pauseOnHover speed={5} gradient={false}>
+                  <h3>{article.title}</h3>
+                </Marquee>
               </div>
             </div>
             <div css={ContentWrapper}>
@@ -409,7 +359,7 @@ const id = ({ article }: TProps): JSX.Element => {
                 />
               ))}
             </div>
-            <Link href="/news">
+            <Link href="/news" style={{ textDecoration: 'none' }}>
               <div css={NewsDetailNavBar}>
                 <div>Back To List</div>
                 <div>

@@ -1,46 +1,11 @@
-import { css, keyframes } from '@emotion/react';
+import { css } from '@emotion/react';
 import theme from '../src/styles/theme';
 import { useRouter } from 'next/router';
 import { urlFor } from '@/lib/helpers';
 
 import introBlockComponents from './portableText/introBlockComponents';
 import { PortableText } from '@portabletext/react';
-
-const MarqueeAnimation = keyframes`
-0% {
-    transform: translate3d(var(--move-initial), 0, 0);
-}
-
-100% {
-    transform: translate3d(var(--move-final), 0, 0);
-}
-`;
-
-const Marquee = css`
-  width: 1600vw;
-  position: relative;
-  overflow: hidden;
-  --offset: 20vw;
-  --move-initial: calc(0);
-  --move-final: calc(-50% + var(--offset));
-  display: flex;
-  align-items: center;
-
-  & > div {
-    width: fit-content;
-    display: inline-block;
-    position: relative;
-    overflow: hidden !important;
-    transform: translate3d(var(--move-initial), 0, 0);
-    animation-play-state: paused;
-    animation-play-state: running;
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-`;
+import Marquee from 'react-fast-marquee';
 
 const Container = css`
   width: 100%;
@@ -63,6 +28,7 @@ const Container = css`
       overflow-x: hidden;
       padding-top: 5px;
       width: 100%;
+      margin-right: 50px;
 
       font-family: ${theme.fontFamily.sans}, sans-serif;
       font-size: ${theme.fontSize.titleSans};
@@ -109,10 +75,9 @@ const Container = css`
 const BannerModuleContainer = css`
   width: calc(100% / 4);
   cursor: pointer;
+
   :hover {
-    & > div:first-of-type {
-      opacity: 0.5;
-    }
+    opacity: 0.5;
   }
 
   display: flex;
@@ -330,17 +295,11 @@ const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
   return (
     <div css={Container}>
       <div>
-        <h2>
-          <div css={Marquee}>
-            <div
-              css={css`
-                animation: ${MarqueeAnimation} 100s linear infinite;
-              `}
-            >
-              <span>curators</span>_{projectsSectionTitle}
-            </div>
-          </div>
-        </h2>
+        <Marquee pauseOnHover gradient={false}>
+          <h2>
+            <span>curators</span>_{projectsSectionTitle}
+          </h2>
+        </Marquee>
       </div>
       <div>
         {projects.map((el: any, _i: number) => {

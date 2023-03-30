@@ -49,7 +49,7 @@ const Container = (menuIsOpen: boolean, headerColor: string) => css`
         cursor: pointer;
 
         :hover {
-          text-decoration: underline;
+          opacity: 0.5;
         }
 
         span {
@@ -313,16 +313,16 @@ const Header = ({ menuIsOpen, setMenuIsOpen }: IHeaderProps): JSX.Element => {
     <div css={Container(menuIsOpen, headerColor)}>
       <div>
         <ul>
-          <Link href="/curatorial_practice">
+          <Link href="/curatorial_practice" style={{ textDecoration: 'none' }}>
             <li>1_curatorial_practice</li>
           </Link>
-          <Link href="/news">
+          <Link href="/news" style={{ textDecoration: 'none' }}>
             <li>2_news</li>
           </Link>
-          <Link href="/about">
+          <Link href="/about" style={{ textDecoration: 'none' }}>
             <li>3_about</li>
           </Link>
-          <Link href="/index">
+          <Link href="/index" style={{ textDecoration: 'none' }}>
             <li>4_index</li>
           </Link>
         </ul>
