@@ -28,7 +28,7 @@ const ArrowBox = css`
   padding: 0 !important;
   align-items: center;
   justify-content: space-between;
-  position: absolute;
+  position: absolute !important;
   z-index: 2;
   top: 50%;
 

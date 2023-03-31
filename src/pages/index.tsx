@@ -34,12 +34,7 @@ const Index = ({ landingPageConfig }: TProps) => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
 
-  React.useEffect(() => {
-    setHeaderColor('#fff');
-  }, []);
-
-  // Test
-  // console.log(landingPageConfig);
+  setHeaderColor('#fff');
 
   return (
     <React.Fragment>

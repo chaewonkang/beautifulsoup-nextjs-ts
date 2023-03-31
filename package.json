@@ -2,6 +2,7 @@
   "name": "beautifulsoup-ts",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -22,12 +23,14 @@
     "@types/react-dom": "18.0.11",
     "axios": "^1.3.4",
     "eslint-config-next": "13.1.6",
+    "google-spreadsheet": "^3.3.0",
+    "html-react-parser": "^3.0.15",
     "next": "13.1.6",
     "next-sanity": "^4.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",
-    "react-html-parser": "^2.0.2",
+    "react-fast-marquee": "^1.3.5",
     "recoil": "^0.7.6",
     "typescript": "4.9.5",
     "zod": "^3.21.4"

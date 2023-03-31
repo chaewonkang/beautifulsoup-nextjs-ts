@@ -8,8 +8,6 @@ interface IVideoEmbedProps {
   videoUrl: string;
 }
 const VideoEmbed = ({ videoUrl }: IVideoEmbedProps) => {
-  // Test
-  console.log(videoUrl);
   return (
     <div>
       <iframe

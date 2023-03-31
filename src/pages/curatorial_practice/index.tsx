@@ -22,42 +22,7 @@ import { PortableText } from '@portabletext/react';
 import introBlockComponents from 'components/portableText/introBlockComponents';
 import { sanityEditorToken } from '@/lib/serverEnvs';
 import { TWithPreviewProps } from '@/sanity/WithPreview';
-
-const MarqueeAnimation = keyframes`
-0% {
-    transform: translate3d(var(--move-initial), 0, 0);
-}
-
-100% {
-    transform: translate3d(var(--move-final), 0, 0);
-}
-`;
-
-const Marquee = css`
-  width: 1600vw;
-  position: relative;
-  overflow: hidden;
-  --offset: 20vw;
-  --move-initial: calc(0);
-  --move-final: calc(-50% + var(--offset));
-  display: flex;
-  align-items: center;
-
-  & > div {
-    width: fit-content;
-    display: inline-block;
-    position: relative;
-    overflow: hidden !important;
-    transform: translate3d(var(--move-initial), 0, 0);
-    animation-play-state: paused;
-    animation-play-state: running;
-  }
-
-  @media only screen and (max-width: ${theme.size.mobile}) {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-`;
+import Marquee from 'react-fast-marquee';
 
 const Container = (headerHeight: number) => css`
   width: 100%;
@@ -174,6 +139,11 @@ const keywordContainer = css`
 
   @media only screen and (max-width: ${theme.size.mobile}) {
     height: 39px;
+    border-bottom: 2.5px solid #000;
+
+    img {
+      width: 20px;
+    }
 
     ul {
       li {
@@ -223,6 +193,11 @@ const filterContainer = css`
 
   @media only screen and (max-width: ${theme.size.mobile}) {
     height: 39px;
+    border-bottom: 2.5px solid #000;
+
+    img {
+      width: 20px;
+    }
 
     ul {
       li {
@@ -243,6 +218,10 @@ const ContentContainer = css`
 `;
 
 const ModuleContainer = css`
+  :hover {
+    opacity: 0.5;
+  }
+
   width: 50%;
   height: auto;
   cursor: pointer;
@@ -286,16 +265,6 @@ const ModuleContainer = css`
     }
   }
 
-  :hover {
-    img {
-      opacity: 0.5;
-    }
-
-    h5 {
-      text-decoration: underline;
-    }
-  }
-
   @media only screen and (max-width: ${theme.size.mobile}) {
     width: 100%;
     padding-right: 0;
@@ -304,6 +273,10 @@ const ModuleContainer = css`
       & > div:first-of-type {
         padding-right: 0;
         padding-left: 0;
+
+        img {
+          padding-left: 0px;
+        }
       }
 
       & > div:last-of-type {
@@ -329,7 +302,6 @@ const ModuleTextWrapper = css`
 
   & > div:first-of-type {
     height: 70px;
-
     border-bottom: 2.5px dashed #000;
     width: 100%;
     display: flex;
@@ -341,6 +313,7 @@ const ModuleTextWrapper = css`
       font-family: ${theme.fontFamily.sans}, sans-serif;
       font-size: ${theme.fontSize.smallTitleSans};
       line-height: ${theme.lineHeight.smallTitleSans};
+      margin-right: 50px;
 
       span {
         font-family: ${theme.fontFamily.serif}, serif;
@@ -503,8 +476,6 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
     setProjectsArr(newArray);
   }
 
-  console.log(projects);
-
   return (
     <React.Fragment>
       <style jsx global>{`
@@ -587,29 +558,30 @@ const CuratorialPractice = ({ tags, categories, projects }: TProps) => {
                     </div>
                     <div css={ModuleTextWrapper}>
                       <div>
-                        <h5>
-                          <div css={Marquee}>
-                            <div
-                              css={css`
-                                animation: ${MarqueeAnimation} 100s linear infinite;
-                              `}
-                            >
-                              <span>
-                                {el.tags.map((tag, _i) => {
-                                  return tag.title;
-                                })}
-                              </span>
-                              _{el.title}
-                            </div>
-                          </div>
-                        </h5>
+                        <Marquee pauseOnHover speed={5} gradient={false}>
+                          <h5>
+                            <span>
+                              {el.tags.length > 1
+                                ? el.tags.map((tag) => {
+                                    if (el.tags.indexOf(tag) < el.tags.length - 1)
+                                      return tag.title + '+';
+                                    else return tag.title;
+                                  })
+                                : el.tags.map((tag) => {
+                                    return tag.title;
+                                  })}
+                            </span>
+                            _{el.title}
+                          </h5>
+                        </Marquee>
                       </div>
+
                       <div>
                         {el.intro && (
                           <PortableText value={el.intro} components={introBlockComponents} />
                         )}
                       </div>
-                      <div>{el.contentExcerpt && <p>{el.contentExcerpt}</p>}</div>
+                      <div>{el.contentExcerpt && <p>{el.contentExcerpt}...</p>}</div>
                     </div>
                   </div>
                 );

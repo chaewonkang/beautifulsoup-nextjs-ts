@@ -1,13 +1,13 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import theme from '../../styles/theme';
+import theme from '../styles/theme';
 
 /* comps */
-import { PageLayout } from '../../../components';
+import { PageLayout } from '../../components';
 
 /* states */
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { headerState, headerColorState } from '../../../state/index';
+import { headerState, headerColorState } from '../../state/index';
 import { TPageCommonProps } from 'interfaces';
 import { GetStaticProps } from 'next';
 import { publicClient } from '@/sanity/publicClient';
@@ -230,7 +230,7 @@ type TProps = TPageCommonProps & TIndexPageData;
 const Index = ({ curators }: TProps): JSX.Element => {
   const headerHeight = useRecoilValue(headerState);
   const [headerColor, setHeaderColor] = useRecoilState(headerColorState);
-  const curatorsRow: number = Math.floor(curators.length / 4);
+  const curatorsRow: number = Math.floor(curators?.length / 4);
   const [curatorsArr, setCuratorsArr] = React.useState<TIndexPageData['curators']>(curators);
 
   function shuffle(array: TIndexPageData['curators']): void {
@@ -274,7 +274,7 @@ const Index = ({ curators }: TProps): JSX.Element => {
         <div css={Container(headerHeight)}>
           <div css={TitleHeader(headerHeight)}>
             <div>
-              <h2>Index</h2>
+              <h2>curators</h2>
             </div>
             <div>
               <ul>

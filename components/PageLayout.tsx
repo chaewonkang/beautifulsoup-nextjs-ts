@@ -9,23 +9,11 @@ interface Props {
 }
 
 const PageLayout = ({ children }: Props) => {
-  const router = useRouter();
-  const transparentPage = '/';
-  const includePage = [];
-
   const [menuIsOpen, setMenuIsOpen] = React.useState<boolean>(false);
-  const [searchIsOpen, setSearchIsOpen] = React.useState<boolean>(false);
-
-  React.useEffect(() => {}, [menuIsOpen, searchIsOpen]);
 
   return (
     <div>
-      <Header
-        menuIsOpen={menuIsOpen}
-        setMenuIsOpen={setMenuIsOpen}
-        searchIsOpen={searchIsOpen}
-        setSearchIsOpen={setSearchIsOpen}
-      />
+      <Header menuIsOpen={menuIsOpen} setMenuIsOpen={setMenuIsOpen} />
       <div>
         {children}
         <Footer />

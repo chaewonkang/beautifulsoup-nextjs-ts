@@ -32,6 +32,7 @@ const ArtistBanner = (colorCode: string) => css`
     letter-spacing: ${theme.letterSpacing.sans};
     width: 100%;
     overflow: hidden;
+    white-space: nowrap;
   }
 
   & > div:last-of-type {
@@ -48,19 +49,19 @@ const ArtistBanner = (colorCode: string) => css`
   }
 
   @media only screen and (max-width: ${theme.size.mobile}) {
-    height: auto;
+    height: 35px;
     padding-top: 5px;
     padding-bottom: 5px;
     border-top: 2.5px solid #000;
 
     & > div:first-of-type {
-      font-size: ${theme.fontSize.m_titleSans};
-      line-height: ${theme.lineHeight.m_titleSans};
+      font-size: ${theme.fontSize.m_smallTitleSans};
+      line-height: ${theme.lineHeight.m_smallTitleSans};
       width: 100%;
     }
 
     & > div:last-of-type {
-      width: 20px;
+      width: 30px;
     }
   }
 `;
@@ -72,27 +73,34 @@ const ArtistBannerComponent = ({
   colorCode,
   curatorName,
 }: IArtistBannerProps): JSX.Element => {
+  if (isCurator) {
+    return (
+      <Link href={`/curatorial_practice/${pathname}`} style={{ textDecoration: 'none' }}>
+        <div css={ArtistBanner(colorCode)}>
+          <div>
+            <span>{name}</span>
+          </div>
+          <div>
+            <Image src={ArrowLeft} alt="arrow_left" />
+          </div>
+        </div>
+      </Link>
+    );
+  }
   return (
-    <div css={ArtistBanner(colorCode)}>
-      <div>
-        {isCurator ? (
-          <Link href={`/curatorial_practice/${pathname}`}>
-            <span>{name}</span>
-          </Link>
-        ) : (
-          <Link href={`/curatorial_practice/${curatorName}/${pathname}`}>
-            <span>{name}</span>
-          </Link>
-        )}
-      </div>
-      <div>
-        {isCurator ? (
-          <Image src={ArrowLeft} alt="arrow_left" />
-        ) : (
+    <Link
+      href={`/curatorial_practice/${curatorName}/${pathname}`}
+      style={{ textDecoration: 'none' }}
+    >
+      <div css={ArtistBanner(colorCode)}>
+        <div>
+          <span>{name}</span>
+        </div>
+        <div>
           <Image src={ArrowRight} alt="arrow_right" />
-        )}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

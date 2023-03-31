@@ -8,11 +8,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import HeaderImage from '../public/images/header.png';
 import smallHeaderImage from '../public/images/smallHeader.png';
-import searchIconImage from '../public/images/searchIcon.png';
+
 import menuIconImage from '../public/images/menuIcon.png';
 import logoImage from '../public/images/logo.png';
 
-const Container = (menuIsOpen: boolean, searchIsOpen: boolean, headerColor: string) => css`
+const Container = (menuIsOpen: boolean, headerColor: string) => css`
   width: calc(100% - 44px);
   height: fit-content;
   display: flex;
@@ -49,41 +49,13 @@ const Container = (menuIsOpen: boolean, searchIsOpen: boolean, headerColor: stri
         cursor: pointer;
 
         :hover {
-          text-decoration: underline;
+          opacity: 0.5;
         }
 
         span {
           font-family: ${theme.fontFamily.serif}, serif;
         }
       }
-    }
-  }
-
-  & > div:nth-of-type(2) {
-    top: ${searchIsOpen ? '0' : '-110px'};
-    position: absolute;
-    background-color: ${headerColor !== '#fff' ? headerColor : '#fff'};
-    display: flex;
-    transition: ease-in 500ms;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    height: 80px;
-    align-items: center;
-    border-bottom: 4px solid #000;
-
-    label {
-      font-family: ${theme.fontFamily.sans}, sans-serif;
-      font-size: ${theme.fontSize.titleSans};
-      cursor: pointer;
-
-      :hover {
-        text-decoration: underline;
-      }
-    }
-
-    input {
-      border-bottom: 2px solid #000;
     }
   }
 
@@ -113,36 +85,10 @@ const Container = (menuIsOpen: boolean, searchIsOpen: boolean, headerColor: stri
         }
       }
     }
-
-    & > div:nth-of-type(2) {
-      padding-bottom: 10px;
-      margin-bottom: 0;
-      height: 54px;
-      top: ${searchIsOpen ? '0' : '-54px'};
-      label {
-        font-family: ${theme.fontFamily.sans}, sans-serif;
-        font-size: ${theme.fontSize.m_bannerSans};
-        cursor: pointer;
-
-        :hover {
-          text-decoration: underline;
-        }
-      }
-
-      input {
-        border-bottom: 2px solid #000;
-        font-size: ${theme.fontSize.m_bannerSans};
-      }
-    }
   }
 `;
 
-const HeaderWrapper = (
-  menuIsOpen: boolean,
-  searchIsOpen: boolean,
-  isScrollOver: boolean,
-  headerColor: string
-) => css`
+const HeaderWrapper = (menuIsOpen: boolean, isScrollOver: boolean, headerColor: string) => css`
   display: flex;
   width: calc(100% - 44px);
   background-color: ${headerColor !== '#fff' ? headerColor : '#fff'};
@@ -152,7 +98,7 @@ const HeaderWrapper = (
   padding-bottom: 16px;
   border-bottom: 4px solid #000;
   transition: ease-in 500ms;
-  top: ${menuIsOpen || searchIsOpen ? '80px' : '0'};
+  top: ${menuIsOpen ? '80px' : '0'};
 
   & > div:first-of-type {
     width: calc((100% / 12) * 5);
@@ -245,7 +191,7 @@ const HeaderWrapper = (
     padding-bottom: 0px;
     width: calc(100% - 32px);
     padding-top: 8px;
-    top: ${menuIsOpen || searchIsOpen ? '38px' : '0'};
+    top: ${menuIsOpen ? '38px' : '0'};
     border-bottom: 2.5px solid #000;
 
     & > div:first-of-type {
@@ -294,18 +240,11 @@ const HeaderWrapper = (
 interface IHeaderProps {
   menuIsOpen: boolean;
   setMenuIsOpen: (open: boolean) => void;
-  searchIsOpen: boolean;
-  setSearchIsOpen: (open: boolean) => void;
 }
 
 type TWhiteBackground = string[];
 
-const Header = ({
-  menuIsOpen,
-  setMenuIsOpen,
-  searchIsOpen,
-  setSearchIsOpen,
-}: IHeaderProps): JSX.Element => {
+const Header = ({ menuIsOpen, setMenuIsOpen }: IHeaderProps): JSX.Element => {
   const router = useRouter();
   const [clientWindowHeight, setClientWindowHeight] = React.useState<number>(0);
   const headerRef = React.useRef<HTMLDivElement>(null);
@@ -371,28 +310,24 @@ const Header = ({
   };
 
   return (
-    <div css={Container(menuIsOpen, searchIsOpen, headerColor)}>
+    <div css={Container(menuIsOpen, headerColor)}>
       <div>
         <ul>
-          <Link href="/curatorial_practice">
+          <Link href="/curatorial_practice" style={{ textDecoration: 'none' }}>
             <li>1_curatorial_practice</li>
           </Link>
-          <Link href="/news">
+          <Link href="/news" style={{ textDecoration: 'none' }}>
             <li>2_news</li>
           </Link>
-          <Link href="/about">
+          <Link href="/about" style={{ textDecoration: 'none' }}>
             <li>3_about</li>
           </Link>
-          <Link href="/index">
-            <li>4_index</li>
+          <Link href="/curators" style={{ textDecoration: 'none' }}>
+            <li>4_curators</li>
           </Link>
         </ul>
       </div>
-      <div>
-        <input type="text" placeholder="Enter something beautiful..." />
-        <label>Search</label>
-      </div>
-      <div css={HeaderWrapper(menuIsOpen, searchIsOpen, isScrollOver, headerColor)} ref={headerRef}>
+      <div css={HeaderWrapper(menuIsOpen, isScrollOver, headerColor)} ref={headerRef}>
         <div>
           <Image src={headerImageSrc} alt="Header_image" />
         </div>
@@ -404,15 +339,6 @@ const Header = ({
             <div>
               <div
                 onClick={() => {
-                  setSearchIsOpen(!searchIsOpen);
-                  setMenuIsOpen(false);
-                }}
-              >
-                <Image src={searchIconImage} alt="search_icon" placeholder="blur" />
-              </div>
-              <div
-                onClick={() => {
-                  setSearchIsOpen(false);
                   setMenuIsOpen(!menuIsOpen);
                 }}
               >

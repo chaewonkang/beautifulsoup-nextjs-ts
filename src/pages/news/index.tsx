@@ -20,6 +20,8 @@ import { newsPageData, TNewsPageData } from '@/schemas';
 import { sanityEditorToken } from '@/lib/serverEnvs';
 import { TWithPreviewProps } from '@/sanity/WithPreview';
 
+import Marquee from 'react-fast-marquee';
+
 const Container = (headerHeight: number) => css`
   width: 100%;
   height: auto;
@@ -115,7 +117,11 @@ const TitleHeader = (headerHeight: number) => css`
 `;
 
 const NewsModuleContainer = css`
+  :hover {
+    opacity: 0.5;
+  }
   width: calc((100% / 12) * 3);
+  cursor: pointer;
   display: flex;
   flex-direction: column;
 
@@ -162,6 +168,7 @@ const NewsModuleContainer = css`
 
   & > div:nth-of-type(3) {
     height: 60px;
+    width: 95%;
     display: flex;
 
     span {
@@ -322,9 +329,9 @@ const News = ({ articles }: TProps) => {
                       />
                     </div>
                     <div>{el.postedAt.slice(0, 10).replace(/-/g, '. ')}</div>
-                    <div>
+                    <Marquee pauseOnHover speed={5} gradient={false}>
                       <span>{el.title}</span>
-                    </div>
+                    </Marquee>
                     <div>{el.contentExcerpt}...</div>
                   </div>
                 );

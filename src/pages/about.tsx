@@ -204,9 +204,6 @@ const About = ({ aboutPageConfig }: TProps) => {
     setHeaderColor('#fff');
   });
 
-  // Test
-  console.log(aboutPageConfig);
-
   return (
     <React.Fragment>
       <style jsx global>{`
