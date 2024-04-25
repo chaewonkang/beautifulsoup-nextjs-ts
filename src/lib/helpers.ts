@@ -23,13 +23,21 @@ export const isPreviewGetReq = (req: NextApiRequest): req is IPreviewGetReq => {
   );
 };
 interface IRevalidatePostReq extends NextApiRequest {
+  method: 'POST';
   body: {
     schemaType: string;
     documentId: string;
   };
 }
-export const isRevalidatePostReq = (req: NextApiRequest): req is IRevalidatePostReq => {
-  return ['schemaType', 'documentId'].every((key) => typeof req.body[key] === 'string');
+export const isRevalidatePostReq = (
+  req: NextApiRequest,
+  secret: string
+): req is IRevalidatePostReq => {
+  return (
+    req.method === 'POST' &&
+    ['schemaType', 'documentId'].every((key) => typeof req.body[key] === 'string') &&
+    req.query.secret === secret
+  );
 };
 
 // Create url from sanity image data

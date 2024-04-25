@@ -84,14 +84,6 @@ const ExitPreviewButton = () => {
   );
 };
 
-// const Redirect = () => {
-//   const router = useRouter();
-//   useEffect(() => {
-//     router.replace('/preview-error');
-//   }, [router]);
-//   return null;
-// };
-
 export const PreviewErrorScreen = () => {
   return (
     <div
