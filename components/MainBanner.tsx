@@ -302,7 +302,7 @@ const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
         </Marquee>
       </div>
       <div>
-        {projects.reverse().map((el: any, _i: number) => {
+        {projects.map((el: any, _i: number) => {
           return (
             <div
               key={_i}

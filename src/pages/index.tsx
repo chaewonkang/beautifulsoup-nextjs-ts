@@ -47,7 +47,7 @@ const Index = ({ landingPageConfig }: TProps) => {
         <div css={Container(headerHeight)}>
           <MainBanner
             projectsSectionTitle={landingPageConfig.projectsSectionTitle}
-            projects={landingPageConfig.projects}
+            projects={landingPageConfig.projects?.reverse()}
           />
           <PublicProgramBanner
             programsSectionTitle={landingPageConfig.programsSectionTitle}
