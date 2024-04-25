@@ -145,7 +145,7 @@ attachments[] {
 `;
 
 const landingPageConfigQuery = groq`
-*[_type == 'landingPageConfig'][0] {
+*[_type == 'landingPageConfig'][0]  {
   projectsSectionTitle,
   projects[] -> {
     ${projectPreviewFields}
@@ -154,7 +154,7 @@ const landingPageConfigQuery = groq`
   programs[] -> {
     ${programPreviewFields}
   },
-}
+} 
 `;
 
 const tagsQuery = groq`

@@ -292,6 +292,8 @@ interface IMainBannerProps {
 const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
   const router = useRouter();
 
+
+
   return (
     <div css={Container}>
       <div>
@@ -302,7 +304,7 @@ const MainBanner = ({ projectsSectionTitle, projects }: IMainBannerProps) => {
         </Marquee>
       </div>
       <div>
-        {projects.map((el: any, _i: number) => {
+        {projects.sort((a: any, b: any) => b.postedAt.localeCompare(a.postedAt)).map((el: any, _i: number) => {
           return (
             <div
               key={_i}
